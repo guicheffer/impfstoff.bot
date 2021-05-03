@@ -1,13 +1,13 @@
 const TelegramBot = require("node-telegram-bot-api");
 const fetch = require("node-fetch");
 
-const botToken = process.env.token;
+const botToken = process.env.TOKEN;
 const today = new Date();
 const bot = new TelegramBot(botToken, { polling: true });
 const logger = console;
 
 const FETCH_VERSION = 0.2;
-const FETCH_FROM_URL = `${process.env.api}?v=${FETCH_VERSION}`;
+const FETCH_FROM_URL = `${process.env.API}?v=${FETCH_VERSION}`;
 const INTERVAL_IN_MINUTES = 0.1; // 6 seconds
 const TIMER_BOT_FETCH = INTERVAL_IN_MINUTES * 1000 * 60;
 const _guichefferId = 93074192;
