@@ -9,7 +9,7 @@ const logger = console;
 
 const API_FETCH_VERSION = 0.2;
 const API_FETCH_FROM_URL = `${process.env.API}?v=${API_FETCH_VERSION}`;
-const INTERVAL_IN_MINUTES = 5; // 6 seconds
+const INTERVAL_IN_MINUTES = 5;
 const TIMER_BOT_FETCH = INTERVAL_IN_MINUTES * 1000 * 60;
 const _guichefferId = 93074192;
 
