@@ -128,9 +128,16 @@ bot.on("message", (msg) => {
       );
     });
   } else if (text === "/help") {
+    const telegramIds = JSON.parse(fs.readFileSync("./ids.json"));
+    if (telegramIds.includes(givenChatId))
+      return bot.sendMessage(
+        givenChatId,
+        "❌ You are already part of the team, just sit back and wait for new upcoming (hopefully) avail. appointments. 😘"
+      );
+
     bot.sendMessage(
       givenChatId,
-      "👋🏼 Run `/join` in order to join on the queue for fetching vaccine appointments."
+      "👋🏼 Run `/join` in order to join on the queue for fetching available vaccine appointments."
     );
   } else {
     bot.sendMessage(givenChatId, "❌ Stop talking shit to me! 🖕🏼");
