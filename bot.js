@@ -81,7 +81,7 @@ setInterval(() => {
           const date = new Date(availableDate).toLocaleDateString("pt-BR");
 
           msgsQueue.push(
-            `💉 Appointments on _${placeName}_ available at *${date}* on ${link}`
+            `💉 Appointments on _${placeName}_ available on *${date}* at ${link}`
           );
         }
       }
@@ -121,12 +121,12 @@ bot.on("message", (msg) => {
         );
         return;
       }
-
-      bot.sendMessage(
-        givenChatId,
-        "👋🏼 Welcome to the team. Just wait for new updates now."
-      );
     });
+
+    bot.sendMessage(
+      givenChatId,
+      "👋🏼 Welcome to the team. Just wait for new updates now."
+    );
   } else if (text === "/help") {
     const telegramIds = JSON.parse(fs.readFileSync("./ids.json"));
     if (telegramIds.includes(givenChatId))
