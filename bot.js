@@ -1,5 +1,6 @@
 const TelegramBot = require("node-telegram-bot-api");
 const fetch = require("node-fetch");
+const fs = require("fs");
 
 const botToken = process.env.TOKEN;
 const today = new Date();
@@ -11,10 +12,6 @@ const FETCH_FROM_URL = `${process.env.API}?v=${FETCH_VERSION}`;
 const INTERVAL_IN_MINUTES = 0.1; // 6 seconds
 const TIMER_BOT_FETCH = INTERVAL_IN_MINUTES * 1000 * 60;
 const _guichefferId = 93074192;
-const telegramIds = [
-  _guichefferId,
-  // 167893598,
-];
 
 const links = {
   arena: "https://bit.ly/2PL4I8J",
@@ -62,9 +59,7 @@ setInterval(() => {
       const { stats: places } = json;
 
       logger.info("🔥 Fetching from ", new Date());
-
-      // TODO: Remove it
-      bot.sendMessage(_guichefferId, "🔥 Fetching from " + new Date());
+      const telegramIds = JSON.parse(fs.readFileSync("./ids.json"));
 
       for (let i = 0; i < places.length; i++) {
         const dates = places[i].stats ?? {};
@@ -106,7 +101,40 @@ bot.on("message", (msg) => {
   const givenChatId = msg.chat.id;
   const text = msg.text;
 
-  bot.sendMessage(givenChatId, "Stop talking shit to me! 🖕🏼");
+  if (text === "/start") {
+    bot.sendMessage(givenChatId, "👋🏼 Please run `/join` to join us! ❤️", {
+      parse_mode: "Markdown",
+    });
+  } else if (text === "/join") {
+    const telegramIds = JSON.parse(fs.readFileSync("./ids.json"));
+    if (telegramIds.includes(givenChatId))
+      return bot.sendMessage(
+        givenChatId,
+        "❌ You are already part of the team, safadinho. 😘"
+      );
+    const data = JSON.stringify([...telegramIds, givenChatId]);
+
+    fs.writeFileSync("./ids.json", data, ({ message }) => {
+      if (message) {
+        logger.error(
+          "❌ There has been an error saving your configuration data." + message
+        );
+        return;
+      }
+
+      bot.sendMessage(
+        givenChatId,
+        "👋🏼 Welcome to the team. Just wait for new updates now."
+      );
+    });
+  } else if (text === "/help") {
+    bot.sendMessage(
+      givenChatId,
+      "👋🏼 Run `/join` in order to join on the queue for fetching vaccine appointments."
+    );
+  } else {
+    bot.sendMessage(givenChatId, "❌ Stop talking shit to me! 🖕🏼");
+  }
 
   // Send message to @guicheffer
   bot.sendMessage(
