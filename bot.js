@@ -35,7 +35,7 @@ const checkFirstAvailableDate = (dates, dateKeys, placeName) => {
     if (diffHrs !== 1) continue;
 
     logger.info(
-      `📸 Closest: ${dateKeys[i]} for ${diffMins} minutes at ${placeName}`
+      `📸 Closest: ${dateKeys[i]} for ${diffMins} minutes at ${placeName} - (${diffMins} <> ${INTERVAL_IN_MINUTES})`
     );
 
     if (diffMins <= INTERVAL_IN_MINUTES) return dateKeys[i];
