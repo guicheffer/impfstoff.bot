@@ -7,9 +7,9 @@ const today = new Date();
 const bot = new TelegramBot(botToken, { polling: true });
 const logger = console;
 
-const FETCH_VERSION = 0.2;
-const FETCH_FROM_URL = `${process.env.API}?v=${FETCH_VERSION}`;
-const INTERVAL_IN_MINUTES = 0.1; // 6 seconds
+const API_FETCH_VERSION = 0.2;
+const API_FETCH_FROM_URL = `${process.env.API}?v=${API_FETCH_VERSION}`;
+const INTERVAL_IN_MINUTES = 5; // 6 seconds
 const TIMER_BOT_FETCH = INTERVAL_IN_MINUTES * 1000 * 60;
 const _guichefferId = 93074192;
 
@@ -38,7 +38,7 @@ const checkFirstAvailableDate = (dates, dateKeys, placeName) => {
       `📸 Closest: ${dateKeys[i]} for ${diffMins} minutes at ${placeName}`
     );
 
-    if (diffMins <= INTERVAL_IN_MINUTES + 1) return dateKeys[i];
+    if (diffMins <= INTERVAL_IN_MINUTES) return dateKeys[i];
   }
 };
 
@@ -46,7 +46,7 @@ const checkFirstAvailableDate = (dates, dateKeys, placeName) => {
 setInterval(() => {
   let msgsQueue = [];
 
-  fetch(FETCH_FROM_URL, {
+  fetch(API_FETCH_FROM_URL, {
     body: null,
     credentials: "omit",
     method: "GET",
