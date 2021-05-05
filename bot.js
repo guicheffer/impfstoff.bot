@@ -115,6 +115,12 @@ bot.on("message", (msg) => {
   const text = msg.text;
 
   if (text === "/start") {
+    if (telegramIds.includes(givenChatId))
+      return bot.sendMessage(
+        givenChatId,
+        "❌ You are already part of the team. 😘"
+      );
+
     bot.sendMessage(givenChatId, "👋🏼 Please run `/join` to join us! ❤️", {
       parse_mode: "Markdown",
     });
