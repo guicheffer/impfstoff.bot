@@ -83,9 +83,11 @@ setInterval(() => {
         if (availableDate) {
           const link = links[place];
           const date = new Date(availableDate).toLocaleDateString("pt-BR");
+          const seen =
+            diffMins === 0 ? "just now" : `seen ${diffMins} mins ago`;
 
           msgsQueue.push(
-            `💉 Appointments on _${placeName}_ available on *${date}* at ${link} (_seen ${diffMins} mins ago_)`
+            `💉 Appointments on _${placeName}_ available on *${date}* at ${link} (_${seen}_)`
           );
         }
       }
@@ -105,7 +107,6 @@ setInterval(() => {
 bot.on("message", (msg) => {
   const givenChatId = msg.chat.id;
   const text = msg.text;
-  console.info(msg.chat);
 
   if (text === "/start") {
     bot.sendMessage(givenChatId, "👋🏼 Please run `/join` to join us! ❤️", {
@@ -131,15 +132,22 @@ bot.on("message", (msg) => {
 
     bot.sendMessage(
       givenChatId,
-      "👋🏼 Welcome to the team. Just wait for new updates now."
+      "👋🏼 Welcome to the team. Just wait for new avail. appointments now."
     );
   } else if (text === "/help") {
     const telegramIds = readTelegramIds();
-    if (telegramIds.includes(givenChatId))
+    if (telegramIds.includes(givenChatId)) {
+      bot.sendMessage(
+        givenChatId,
+        "❌ You are already part of the team, just sit back, relax and wait for new upcoming, hopefully, available appointments seen in less than 10 minutes. 😘"
+      );
+
       return bot.sendMessage(
         givenChatId,
-        "❌ You are already part of the team, just sit back and wait for new upcoming, hopefully, available appointments seen in less than 10 minutes. 😘"
+        '‼️ Based on the statistics we’ve collected, a "significantly earlier" appointment stays available for about *20 seconds*. That is the amount of time that you have to choose the dates for the first and second shots, agree to the notices, fill the form with your information and confirm. Being able to do this all for the first time in 20 seconds is virtually impossible, so we recommend that you book an appointment for a later date to get used to the process, and then cancel that appointment if you want to try to book an earlier date.',
+        { parse_mode: "Markdown" }
       );
+    }
 
     bot.sendMessage(
       givenChatId,
@@ -155,7 +163,10 @@ bot.on("message", (msg) => {
       bot.sendMessage(telegramId, message, { parse_mode: "Markdown" });
     });
   } else {
-    bot.sendMessage(givenChatId, "❌ Stop talking shit to me! 🖕🏼");
+    bot.sendMessage(
+      givenChatId,
+      "❌ I appreciate your message, however, I can't talk to you right now as we're kindly waiting and looking for new appointments!"
+    );
   }
 
   // Send message to @guicheffer
