@@ -8,4 +8,4 @@ Just talk to this bot: [@impfstoffBot](http://telegram.me/impfstoffBot)
 
 ## Credits
 
-**ps**. Based on [impfstoff.link](https://impfstoff.link/)'s idea.
+**ps**. Based on [impfstoff.link](https://impfstoff.link/)'s idea. Thanks to this site we were able to rely on their API.
