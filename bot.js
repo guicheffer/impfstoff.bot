@@ -142,6 +142,11 @@ bot.on("message", (msg) => {
         "❌ You are already part of the team, just sit back, relax and wait for new upcoming, hopefully, available appointments seen in less than 10 minutes. 😘"
       );
 
+      bot.sendMessage(
+        givenChatId,
+        "❗️ We send the avail. appointments over a time box of 10 minutes (in case new ones pop up). 😘"
+      );
+
       return bot.sendMessage(
         givenChatId,
         '‼️ Based on the statistics we’ve collected, a "significantly earlier" appointment stays available for about *20 seconds*. That is the amount of time that you have to choose the dates for the first and second shots, agree to the notices, fill the form with your information and confirm. Being able to do this all for the first time in 20 seconds is virtually impossible, so we recommend that you book an appointment for a later date to get used to the process, and then cancel that appointment if you want to try to book an earlier date.',
