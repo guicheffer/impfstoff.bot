@@ -1,6 +1,6 @@
 # 💉 impfstoff.bot
 
-Bot for telegram and alexa to fetch vaccine appointments in Berlin.
+Bot for telegram, twitter and (potentially) alexa to fetch vaccine appointments in Berlin.
 
 ## How to?
 
