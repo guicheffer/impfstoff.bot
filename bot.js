@@ -44,8 +44,14 @@ const checkFirstAvailableDate = (dates, dateKeys, placeName) => {
 
     if (diffMins <= DIFF_MIN) {
       if (usedQueue[dateKeys[i]]?.toString() === lastTime.toString()) return;
+      if (diffMins === 0 && usedQueue[dateKeys[i]] === 0) return;
 
-      usedQueue[dateKeys[i]] = lastTime;
+      if (diffMins === 0) {
+        usedQueue[dateKeys[i]] = 0;
+      } else {
+        usedQueue[dateKeys[i]] = lastTime;
+      }
+
       return { availableDate: dateKeys[i], diffMins };
     }
   }
@@ -132,7 +138,7 @@ bot.on("message", (msg) => {
 
     bot.sendMessage(
       givenChatId,
-      "👋🏼 Welcome to the team. Just wait for new avail. appointments now."
+      "👋🏼 Welcome to the team. Just wait for new avail. appointments now. In the meantime, feel free to check upon this website overall avail. dates: https://impfstoff.link/"
     );
   } else if (text === "/help") {
     const telegramIds = readTelegramIds();
