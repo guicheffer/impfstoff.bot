@@ -153,10 +153,12 @@ bot.on("message", (msg) => {
       );
     }
 
-    bot.sendMessage(
-      givenChatId,
-      "👋🏼 Run `/join` in order to join on the queue for fetching available vaccine appointments."
-    );
+    bot.sendMessage(givenChatId, "👋🏼 Press `Join` in order to join on the queue for fetching available vaccine appointments.", {
+      parse_mode: "Markdown",
+      reply_markup: {
+        inline_keyboard: [[{ text: 'Join', callback_data: 'join' }]],
+      }
+    });
   } else if (givenChatId === _guichefferId && text.includes("/broadcast")) {
     const telegramIds = readTelegramIds();
     const message = text.replace("/broadcast ", "📣 ");
