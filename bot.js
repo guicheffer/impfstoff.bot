@@ -23,13 +23,18 @@ const links = {
   erika: "https://bit.ly/2QIki5J",
 };
 
-// Initialize files
-if (!fs.existsSync("./users-settings.json"))
-  fs.writeFileSync("./users-settings.json", JSON.stringify({}), { flag: "wx" });
-if (!fs.existsSync("./ids.json"))
-  fs.writeFileSync("./ids.json", JSON.stringify([]), { flag: "wx" });
+const paths = {
+  userIds: "./ids.json",
+  usersSettings: "./users-settings.json",
+};
 
-const readTelegramIds = () => JSON.parse(fs.readFileSync("./ids.json"));
+// Initialize files
+if (!fs.existsSync(paths.usersSettings))
+  fs.writeFileSync(paths.usersSettings, JSON.stringify({}), { flag: "wx" });
+if (!fs.existsSync(paths.userIds))
+  fs.writeFileSync(paths.userIds, JSON.stringify([]), { flag: "wx" });
+
+const readTelegramIds = () => JSON.parse(fs.readFileSync(paths.userIds));
 
 const checkFirstAvailableDate = (dates, dateKeys, placeName) => {
   for (let i = 0; i < dateKeys.length; i++) {
@@ -78,7 +83,7 @@ setInterval(() => {
       const { stats: places } = json;
 
       logger.info("🔥 Fetching from ", new Date());
-      const telegramIds = JSON.parse(fs.readFileSync("./ids.json"));
+      const telegramIds = JSON.parse(fs.readFileSync(paths.userIds));
 
       for (let i = 0; i < places.length; i++) {
         const dates = places[i].stats ?? {};
@@ -133,7 +138,7 @@ bot.on("message", (msg) => {
       );
     const data = JSON.stringify([...telegramIds, givenChatId]);
 
-    fs.writeFileSync("./ids.json", data, ({ message }) => {
+    fs.writeFileSync(paths.userIds, data, ({ message }) => {
       if (message) {
         logger.error(
           "❌ There has been an error saving your configuration data." + message
