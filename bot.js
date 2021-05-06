@@ -23,6 +23,12 @@ const links = {
   erika: "https://bit.ly/2QIki5J",
 };
 
+// Initialize files
+if (!fs.existsSync("./users-settings.json"))
+  fs.writeFileSync("./users-settings.json", JSON.stringify({}), { flag: "wx" });
+if (!fs.existsSync("./ids.json"))
+  fs.writeFileSync("./ids.json", JSON.stringify([]), { flag: "wx" });
+
 const readTelegramIds = () => JSON.parse(fs.readFileSync("./ids.json"));
 
 const checkFirstAvailableDate = (dates, dateKeys, placeName) => {
