@@ -44,7 +44,8 @@ const checkFirstAvailableDate = (dates, dateKeys, placeName) => {
 
     if (diffMins <= DIFF_MIN) {
       if (usedQueue[dateKeys[i]]?.toString() === lastTime.toString()) return;
-      if (diffMins === 0 && usedQueue[dateKeys[i]] === 0) return;
+      if ((diffMins === 0 || diffMins === 1) && usedQueue[dateKeys[i]] === 0)
+        return;
 
       if (diffMins === 0) {
         usedQueue[dateKeys[i]] = 0;
