@@ -144,14 +144,16 @@ bot.on("message", (msg) => {
       bot.sendMessage(telegramId, message, { parse_mode: "Markdown" });
     });
   } else {
+    const telegramIds = readTelegramIds();
+
+    let buttons = [[{ text: 'Help', callback_data: 'help' }]];
+
+    buttons.unshift(telegramIds.includes(givenChatId) ? [{ text: 'Stop, please!', callback_data: 'stop' }] : [{ text: 'Join', callback_data: 'join' }]);
+
     bot.sendMessage(givenChatId, "🤔 Not sure what you mean, but maybe one of the following options can help you:", {
       parse_mode: "Markdown",
       reply_markup: {
-        inline_keyboard: [
-          [{ text: 'Stop, please!', callback_data: 'stop' }],
-          [{ text: 'Help', callback_data: 'help' }],
-          [{ text: 'Join', callback_data: 'join' }],
-        ],
+        inline_keyboard: buttons,
       }
     });
   }
