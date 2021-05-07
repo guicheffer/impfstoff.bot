@@ -55,7 +55,8 @@ const checkFirstAvailableDate = (dates, dateKeys, placeName) => {
 
     if (diffMins <= DIFF_MIN) {
       if (usedQueue[dateKeys[i]]?.toString() === lastTime.toString()) return;
-      if (diffMins === 0 && usedQueue[dateKeys[i]] === 0) return;
+      if ((diffMins === 0 || diffMins === 1) && usedQueue[dateKeys[i]] === 0)
+        return;
 
       if (diffMins === 0) {
         usedQueue[dateKeys[i]] = 0;
@@ -135,6 +136,7 @@ bot.on("message", (msg) => {
     });
   } else if (text === "/help") {
     const telegramIds = readTelegramIds();
+    
     if (telegramIds.includes(givenChatId)) {
       bot.sendMessage(
         givenChatId,
@@ -189,6 +191,7 @@ bot.on("callback_query", (query) => {
 
   if (action === "join") {
     const telegramIds = readTelegramIds();
+
     if (telegramIds.includes(givenChatId))
       return bot.sendMessage(
         givenChatId,
