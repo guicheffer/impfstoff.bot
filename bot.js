@@ -23,7 +23,18 @@ const links = {
   erika: "https://bit.ly/2QIki5J",
 };
 
-const readTelegramIds = () => JSON.parse(fs.readFileSync("./ids.json"));
+const paths = {
+  userIds: "./ids.json",
+  usersSettings: "./users-settings.json",
+};
+
+// Initialize files
+if (!fs.existsSync(paths.usersSettings))
+  fs.writeFileSync(paths.usersSettings, JSON.stringify({}), { flag: "wx" });
+if (!fs.existsSync(paths.userIds))
+  fs.writeFileSync(paths.userIds, JSON.stringify([]), { flag: "wx" });
+
+const readTelegramIds = () => JSON.parse(fs.readFileSync(paths.userIds));
 
 const checkFirstAvailableDate = (dates, dateKeys, placeName) => {
   for (let i = 0; i < dateKeys.length; i++) {
@@ -73,7 +84,7 @@ setInterval(() => {
       const { stats: places } = json;
 
       logger.info("🔥 Fetching from ", new Date());
-      const telegramIds = JSON.parse(fs.readFileSync("./ids.json"));
+      const telegramIds = JSON.parse(fs.readFileSync(paths.userIds));
 
       for (let i = 0; i < places.length; i++) {
         const dates = places[i].stats ?? {};
@@ -111,44 +122,21 @@ setInterval(() => {
     });
 }, TIMER_BOT_FETCH);
 
+// Listen to messages
 bot.on("message", (msg) => {
   const givenChatId = msg.chat.id;
   const text = msg.text;
 
   if (text === "/start") {
-    if (telegramIds.includes(givenChatId))
-      return bot.sendMessage(
-        givenChatId,
-        "❌ You are already part of the team. 😘"
-      );
-
-    bot.sendMessage(givenChatId, "👋🏼 Please run `/join` to join us! ❤️", {
+    bot.sendMessage(givenChatId, "👋🏼 Please press `Join` to join us! ❤️", {
       parse_mode: "Markdown",
-    });
-  } else if (text === "/join") {
-    const telegramIds = readTelegramIds();
-    if (telegramIds.includes(givenChatId))
-      return bot.sendMessage(
-        givenChatId,
-        "❌ You are already part of the team. 😘"
-      );
-    const data = JSON.stringify([...telegramIds, givenChatId]);
-
-    fs.writeFileSync("./ids.json", data, ({ message }) => {
-      if (message) {
-        logger.error(
-          "❌ There has been an error saving your configuration data." + message
-        );
-        return;
+      reply_markup: {
+        inline_keyboard: [[{ text: 'Join', callback_data: 'join' }]],
       }
     });
-
-    bot.sendMessage(
-      givenChatId,
-      "👋🏼 Welcome to the team. Just wait for new avail. appointments now. In the meantime, feel free to check upon this website overall avail. dates: https://impfstoff.link/"
-    );
   } else if (text === "/help") {
     const telegramIds = readTelegramIds();
+    
     if (telegramIds.includes(givenChatId)) {
       bot.sendMessage(
         givenChatId,
@@ -167,10 +155,12 @@ bot.on("message", (msg) => {
       );
     }
 
-    bot.sendMessage(
-      givenChatId,
-      "👋🏼 Run `/join` in order to join on the queue for fetching available vaccine appointments."
-    );
+    bot.sendMessage(givenChatId, "👋🏼 Press `Join` in order to join on the queue for fetching available vaccine appointments.", {
+      parse_mode: "Markdown",
+      reply_markup: {
+        inline_keyboard: [[{ text: 'Join', callback_data: 'join' }]],
+      }
+    });
   } else if (givenChatId === _guichefferId && text.includes("/broadcast")) {
     const telegramIds = readTelegramIds();
     const message = text.replace("/broadcast ", "📣 ");
@@ -192,4 +182,35 @@ bot.on("message", (msg) => {
     _guichefferId,
     `📣 Someone talking to your bot (${givenChatId} - ${msg.chat?.first_name} (${msg.chat?.username})): ${text}`
   );
+});
+
+// Listen to queries from inline keyboards
+bot.on("callback_query", (query) => {
+  const givenChatId = query.from.id;
+  const action = query.data;
+
+  if (action === "join") {
+    const telegramIds = readTelegramIds();
+
+    if (telegramIds.includes(givenChatId))
+      return bot.sendMessage(
+        givenChatId,
+        "❌ You are already part of the team. 😘"
+      );
+    const data = JSON.stringify([...telegramIds, givenChatId]);
+
+    fs.writeFileSync(paths.userIds, data, ({ message }) => {
+      if (message) {
+        logger.error(
+          "❌ There has been an error saving your configuration data." + message
+        );
+        return;
+      }
+    });
+
+    bot.sendMessage(
+      givenChatId,
+      "👋🏼 Welcome to the team. Just wait for new avail. appointments now. In the meantime, feel free to check upon this website overall avail. dates: https://impfstoff.link/"
+    );
+  }
 });
