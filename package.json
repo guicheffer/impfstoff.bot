@@ -11,6 +11,10 @@
   "dependencies": {
     "dotenv": "^9.0.0",
     "node-fetch": "^2.6.1",
-    "node-telegram-bot-api": "^0.53.0"
+    "node-telegram-bot-api": "^0.53.0",
+    "pino": "^6.11.3"
+  },
+  "devDependencies": {
+    "pino-pretty": "^4.7.1"
   }
 }

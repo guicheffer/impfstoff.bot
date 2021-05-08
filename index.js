@@ -2,15 +2,13 @@ require("dotenv").config();
 const fetch = require("node-fetch");
 
 const bots = require("./bots.js");
-
-const logger = console;
-const usedQueue = {};
+const logger = require("./logger");
 
 const API_FETCH_FROM_URL = `${process.env.API}?robot=1`;
-const DIFF_MIN = 10; // TODO: Iterate on top of this if necessary
+const DIFF_MIN = 5;
 const TIMER_BOT_FETCH = 1000;
 
-const links = {
+const urls = {
   arena: "https://bit.ly/2PL4I8J",
   tempelhof: "https://bit.ly/2PONurc",
   messe: "https://bit.ly/3b0xCJr",
@@ -19,7 +17,8 @@ const links = {
   erika: "https://bit.ly/2QIki5J",
 };
 
-const checkFirstAvailableDate = (dates, dateKeys, placeName) => {
+const usedQueue = {};
+const checkFirstAvailableDate = (dates, dateKeys) => {
   for (let i = 0; i < dateKeys.length; i++) {
     const today = new Date();
     const currentDate = dates[dateKeys[i]];
@@ -52,7 +51,7 @@ const checkFirstAvailableDate = (dates, dateKeys, placeName) => {
 setInterval(() => {
   let msgsQueue = [];
 
-  logger.info("🔥 Fetching from ", new Date());
+  logger.info({ timestamp: new Date() }, "FETCH_TIMESTAMP");
 
   fetch(API_FETCH_FROM_URL, {
     body: null,
@@ -77,8 +76,8 @@ setInterval(() => {
           checkFirstAvailableDate(dates, dateKeys, placeName) ?? {};
 
         if (availableDate) {
-          const link = links[place];
-          const date = new Date(availableDate).toLocaleDateString("pt-BR");
+          const link = urls[place];
+          const date = new Date(availableDate).toLocaleDateString("de-DE");
           const seen =
             diffMins === 0 ? "just now" : `seen ${diffMins} mins ago`;
 
