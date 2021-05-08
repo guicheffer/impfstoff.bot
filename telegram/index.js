@@ -99,9 +99,8 @@ bot.on("message", ({ chat, text: rawText }) => {
 });
 
 // Listen to queries from inline keyboards
-bot.on("callback_query", (query) => {
-  const id = query.from.id;
-  const action = query.data;
+bot.on("callback_query", ({ data: action, message }) => {
+  const { chat } = message;
   const userIds = readUserIds();
 
   if (ACTIONS.join.enum === action)
