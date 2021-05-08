@@ -99,9 +99,12 @@ bot.on("message", ({ chat, text: rawText }) => {
 });
 
 // Listen to queries from inline keyboards
-bot.on("callback_query", ({ data: action, message }) => {
+bot.on("callback_query", async ({ data: action, message }) => {
   const { chat } = message;
   const userIds = readUserIds();
+  const messageId = message.message_id;
+
+  await bot.deleteMessage(chat.id, messageId);
 
   if (ACTIONS.join.enum === action)
     return send(messages.getJoin(userIds, chat));
