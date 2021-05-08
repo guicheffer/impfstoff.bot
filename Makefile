@@ -9,7 +9,7 @@ help:
 
 amount: amount-check
 amount-check: ## Check the current amount of users in the bot
-	node -e 'const x = require("./telegram/resources/users.json"); console.log(x.ids.length)'
+	node -e 'const users = require("./telegram/resources/users.json"); console.log(users.ids.length)'
 
 restart: ## Restart the app
 	sudo pm2 delete npm
