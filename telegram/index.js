@@ -57,7 +57,7 @@ const broadcast = (message, options = {}) => {
 
 // Listen to messages
 bot.on("message", ({ chat, text: rawText }) => {
-  const { id, username } = chat;
+  const { id } = chat;
   const text = rawText.toLowerCase();
 
   // Broadcast (only for admins)

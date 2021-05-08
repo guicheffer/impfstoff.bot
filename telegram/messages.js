@@ -72,8 +72,8 @@ const getStop = (userIds, { id, ...chat }) => {
   const isPresent = userIds.includes(id);
 
   if (isPresent) {
-    const rawUserIds = userIds.filter((id) => id !== id);
-    const newUserIds = JSON.stringify({ ids: rawUserIds });
+    const filteredUserIds = userIds.filter((currentId) => currentId !== id);
+    const newUserIds = JSON.stringify({ ids: filteredUserIds });
 
     fs.writeFileSync(paths.users.fileName, newUserIds, (error) => {
       logger.error({ error }, "FAIL_SAVING_FILE");
