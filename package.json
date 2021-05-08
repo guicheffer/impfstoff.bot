@@ -4,12 +4,12 @@
   "description": "A bot for sending corona vaccines appointments to telegram and alexa",
   "main": "telegram+alexa.js",
   "scripts": {
-    "start": "node bot.js",
-    "test": "npm test"
+    "start": "node index.js"
   },
   "author": "@guicheffer",
   "license": "ISC",
   "dependencies": {
+    "dotenv": "^9.0.0",
     "node-fetch": "^2.6.1",
     "node-telegram-bot-api": "^0.53.0"
   }

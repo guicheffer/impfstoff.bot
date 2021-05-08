@@ -1,2 +1,10 @@
+# Deps
 node_modules
-ids.json
+
+# App
+.env
+users.json
+users-settings.json
+
+# Extra
+.DS_Store
