@@ -2,12 +2,9 @@ const fs = require("fs");
 const paths = require("./paths.js");
 const logger = require("../logger");
 
-const logAction = (
-  action,
-  amountUsers,
-  { first_name, id, username },
-  isPresent
-) =>
+const logAction = (action, amountUsers, { chat, id }, isPresent) => {
+  const { first_name, username } = chat;
+
   logger.info(
     {
       amountUsers,
@@ -18,6 +15,7 @@ const logAction = (
     },
     action
   );
+};
 
 const getJoin = (userIds, { id, ...chat }) => {
   const isPresent = userIds.includes(id);
@@ -31,7 +29,7 @@ const getJoin = (userIds, { id, ...chat }) => {
     logger.error({ error }, "FAILED_SAVING_FILE");
   });
 
-  logAction("JOIN", userIds.length + 1, { id, chat });
+  logAction("JOIN", userIds.length + 1, { chat, id });
 
   return {
     id,
@@ -43,7 +41,7 @@ const getJoin = (userIds, { id, ...chat }) => {
 const getHelp = (userIds, { id, ...chat }) => {
   const isPresent = userIds.includes(id);
 
-  logAction("HELP", userIds.length, { id, chat }, isPresent);
+  logAction("HELP", userIds.length, { chat, id }, isPresent);
 
   if (isPresent)
     return {
@@ -79,7 +77,7 @@ const getStop = (userIds, { id, ...chat }) => {
       logger.error({ error }, "FAIL_SAVING_FILE");
     });
 
-    logAction("STOP", userIds.length - 1, { id, chat });
+    logAction("STOP", userIds.length - 1, { chat, id });
 
     return {
       id,
