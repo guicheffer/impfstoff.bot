@@ -5,7 +5,7 @@ const bots = require("./bots.js");
 const logger = require("./logger");
 
 const DIFF_MIN = 5; // 5 minutes diff
-const TIMER_BOT_FETCH = 5 * 1000; // 5 seconds
+const TIMER_BOT_FETCH = 2 * 1000; // 2 seconds
 
 const urls = {
   arena: "https://bit.ly/2PL4I8J",
