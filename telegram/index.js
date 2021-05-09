@@ -67,9 +67,12 @@ const broadcast = async (message, { force = false, ...options } = {}) => {
                 })
               );
             } catch (error) {
-              logger.error({ error, id }, "BLOCKED_USER_TO_REMOVE");
-
-              blockedUserIds.push(id);
+              if (error.message.includes("bot was blocked by the user")) {
+                blockedUserIds.push(id);
+                logger.error({ error, id }, "BLOCKED_USER_TO_REMOVE");
+              } else {
+                logger.error({ error, id }, "GENERAL_BROADCAST_ERROR");
+              }
 
               reject(error);
             }
