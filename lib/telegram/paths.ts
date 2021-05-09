@@ -13,7 +13,7 @@ const DEFAULT_IDS_PAYLOAD: DefaultIdsPayload = { ids: [] }
 
 type Admins = PathInfo
 type Users = PathInfo
-type UsersSettings = PathInfo<{}>
+type UsersSettings = PathInfo<Record<string, unknown>>
 
 type Paths = {
   admins: Admins

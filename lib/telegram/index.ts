@@ -94,6 +94,7 @@ export async function broadcast(
         }),
     )
 
+  // eslint-disable-next-line @typescript-eslint/no-empty-function
   await Promise.all(mapUsersPromises).catch(() => {}) // No needs to log all promises
 
   if (blockedUserIds.length) {
