@@ -11,7 +11,12 @@ amount: amount-check
 amount-check: ## Check the current amount of users in the bot
 	node -e 'const users = require("./telegram/resources/users.json"); console.log(users.ids.length)'
 
+clean: ## Clean up useful resources
+	cp ./telegram/resources/users.json .
+	make amount
+
 restart: ## Restart the app
+	make clean
 	sudo pm2 delete npm
 	sudo pm2 start npm -- start
 	make log
