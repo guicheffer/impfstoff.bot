@@ -90,7 +90,11 @@ const broadcast = async (message, { force = false, ...options } = {}) => {
     messages.saveNewUserIds(JSON.stringify({ ids: userIdsWithoutBlockedOnes }));
 
     logger.warn(
-      { oldAmount: userIds.length, blockedAmount: blockedUserIds.length },
+      {
+        oldAmount: userIds.length,
+        blockedAmount: blockedUserIds.length,
+        blocked: blockedUserIds,
+      },
       "REMOVED_USERS"
     );
   }
