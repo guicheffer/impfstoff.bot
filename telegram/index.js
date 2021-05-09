@@ -41,12 +41,17 @@ const send = async ({ id, message, omit = true, options }) => {
 };
 
 let blockedUserIds = [];
-const broadcast = async (message, options = {}) => {
-  // TODO: Insert -> while isBroadcasting?
+let shouldDebounceBroadcast = false;
+const broadcast = async (message, { force = false, ...options } = {}) => {
+  // Force debounce on broadcast
+  if (!force && shouldDebounceBroadcast)
+    return Promise.reject({ message: "STILL_BROADCASTING", text: message });
+  if (!force) shouldDebounceBroadcast = true;
+
   const userIds = readUserIds();
-  blockedUserIds = [];
 
   // This will prioritize LIFO over the user ids when broadcasting
+  blockedUserIds = [];
   const mapUsersPromises = readUserIds()
     .reverse()
     .map(
@@ -86,6 +91,9 @@ const broadcast = async (message, options = {}) => {
       "REMOVED_USERS"
     );
   }
+
+  // Return to normal state
+  shouldDebounceBroadcast = false;
 };
 
 // Listen to messages
@@ -98,8 +106,13 @@ bot.on("message", ({ chat, text: rawText }) => {
     const message = text.replace("/broadcast ", "📣 ");
 
     return broadcast(message, {
+      force: true, // Force broadcast to happen since it's a manual announcement
       [DISABLE_PAGE_PREVIEW]: false,
-    }).then(() => logger.info(`📣 Broadcasted: "${text}"`, "SEND_BROADCAST"));
+    })
+      .then(() => logger.info(`📣 Broadcasted: "${text}"`, "SEND_BROADCAST"))
+      .catch((error) => {
+        logger.error(error);
+      });
   }
 
   const userIds = readUserIds();
