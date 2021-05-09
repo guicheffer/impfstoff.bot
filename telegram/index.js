@@ -38,7 +38,7 @@ const send = async ({ id, message, omit, options }) => {
   if (!omit) logger.info({ id, message }, "SEND");
 
   await bot.sendMessage(id, message, options).catch((error) => {
-    logger.error({ id, error }, "FAILED_TO_SEND");
+    logger.error({ error, id }, "FAILED_TO_SEND");
   });
 };
 

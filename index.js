@@ -51,8 +51,6 @@ const checkFirstAvailableDate = (dates, dateKeys) => {
 setInterval(() => {
   let msgsQueue = [];
 
-  logger.info({ timestamp: new Date() }, "FETCH_TIMESTAMP");
-
   fetch(API_FETCH_FROM_URL, {
     body: null,
     credentials: "omit",
@@ -88,5 +86,6 @@ setInterval(() => {
       }
 
       msgsQueue.forEach((message) => bots.send(message));
-    });
+    })
+    .catch((error) => logger.error({ error }, "FAILED_FETCH"));
 }, TIMER_BOT_FETCH);

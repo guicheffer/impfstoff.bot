@@ -16,5 +16,6 @@ restart: ## Restart the app
 	sudo pm2 start npm -- start
 	make log
 
+logs: log
 log: ## Check upon recent logs in pm2
 	sudo pm2 log npm
