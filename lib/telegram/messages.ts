@@ -109,3 +109,13 @@ export function getStop(userIds: number[], chat: TelegramBot.Chat): Message {
     },
   }
 }
+
+export function getContribute(chat: TelegramBot.Chat): Message {
+  const { id } = chat
+
+  return {
+    id,
+    message:
+      '❤️ If you would like to contribute with us, please check this repo: https://github.com/guicheffer/impfstoff.bot',
+  }
+}

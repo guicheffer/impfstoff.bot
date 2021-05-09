@@ -140,6 +140,7 @@ bot.on('message', ({ chat, text: rawText }: TelegramBot.Message) => {
   if (isJoinMessage(text)) return send(messages.getJoin(userIds, chat))
   if (isStopMessage(text)) return send(messages.getStop(userIds, chat))
   if (isHelpMessage(text)) return send(messages.getHelp(userIds, chat))
+  if (text.startsWith('/contribute')) return send(messages.getContribute(chat))
 
   // Otherwise:
   const buttons = [[{ text: ACTIONS.help.copy, callback_data: ACTIONS.help.enum }]]

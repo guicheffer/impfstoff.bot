@@ -28,3 +28,9 @@ restart: ## Restart the app
 logs: log
 log: ## Check upon recent logs in pm2
 	sudo pm2 log npm
+
+start: ## Start prod
+	npm run start
+
+dev: ## Run dev
+	npm run start:dev
