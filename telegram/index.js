@@ -40,8 +40,11 @@ const send = async ({ id, message, omit = true, options }) => {
   await bot.sendMessage(id, message, options);
 };
 
+let blockedUserIds = [];
 const broadcast = async (message, options = {}) => {
-  let blockedUserIds = [];
+  // TODO: Insert -> while isBroadcasting?
+  const userIds = readUserIds();
+  blockedUserIds = [];
 
   // This will prioritize LIFO over the user ids when broadcasting
   const mapUsersPromises = readUserIds()
@@ -69,21 +72,20 @@ const broadcast = async (message, options = {}) => {
         })
     );
 
-  await Promise.all(mapUsersPromises)
-    .finally(() => {
-      if (blockedUserIds.length) {
-        const userIdsWithoutBlockedOnes = readUserIds().filter(
-          (currentId) => !blockedUserIds.includes(currentId)
-        );
+  await Promise.all(mapUsersPromises).catch(() => {}); // No needs to log all promises
 
-        messages.saveNewUserIds(
-          JSON.stringify({ ids: userIdsWithoutBlockedOnes })
-        );
+  if (blockedUserIds.length) {
+    const userIdsWithoutBlockedOnes = readUserIds().filter(
+      (currentId) => !blockedUserIds.includes(currentId)
+    );
 
-        logger.warn({ amount: blockedUserIds.length }, "REMOVED_USERS");
-      }
-    })
-    .catch(() => {}); // No needs to log all promises
+    messages.saveNewUserIds(JSON.stringify({ ids: userIdsWithoutBlockedOnes }));
+
+    logger.warn(
+      { oldAmount: userIds.length, blockedAmount: blockedUserIds.length },
+      "REMOVED_USERS"
+    );
+  }
 };
 
 // Listen to messages
