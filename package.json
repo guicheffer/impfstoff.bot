@@ -4,10 +4,10 @@
   "description": "A bot for sending corona vaccines appointments to telegram and alexa",
   "main": "built/lib/index.js",
   "scripts": {
-    "start": "npm run build && node built/lib/index.js",
+    "start": "node built/lib/index.js",
     "start:dev": "ts-node lib/index.ts",
     "build": "npm run clean && tsc",
-    "clean": "rm -rf built/",
+    "clean": "sudo rm -rf built/",
     "lint": "eslint --ext .ts ."
   },
   "author": "@guicheffer",

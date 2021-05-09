@@ -15,14 +15,13 @@ backup: ## Backup and mention amount of telegram users
 	cp ./resources/telegram/users.json .
 	make amount
 
-clean: clear
-clear: ## Clear 
-	npm clean
+clear: clean
+clean: ## Clear stuff
+	npm run clean
+	sudo pm2 delete npm
 
 restart: ## Restart the app
-	make clean
-	sudo pm2 delete npm
-	sudo pm2 start npm -- start
+	make start
 	make log
 
 logs: log
@@ -30,7 +29,11 @@ log: ## Check upon recent logs in pm2
 	sudo pm2 log npm
 
 start: ## Start prod
-	npm run start
+	make build
+	sudo pm2 start npm -- start
+
+build: ## Build for prod env
+	npm run build
 
 dev: ## Run dev
 	npm run start:dev
