@@ -2,7 +2,7 @@ const fs = require("fs");
 const paths = require("./paths.js");
 const logger = require("../logger");
 
-const logAction = (action, amountUsers, { chat, id }, isPresent) => {
+const logAction = (action, amountUsers, { chat, id }, _isPresent) => {
   const { first_name, username } = chat;
 
   logger.info(
@@ -11,24 +11,24 @@ const logAction = (action, amountUsers, { chat, id }, isPresent) => {
       first_name,
       id,
       username,
-      ...(action === "HELP" ? { isPresent } : {}),
+      ...(action === "HELP" ? { _isPresent } : {}),
     },
     action
   );
 };
 
-const getJoin = (userIds, { id, ...chat }) => {
-  const isPresent = userIds.includes(id);
-
-  if (isPresent)
-    return { id, message: "❌ You are already part of the team. 😘" };
-
-  const newUserIds = JSON.stringify({ ids: [...userIds, id] });
-
-  fs.writeFileSync(paths.users.fileName, newUserIds, (error) => {
+const saveNewUserIds = (userIds) =>
+  fs.writeFileSync(paths.users.fileName, userIds, (error) => {
     logger.error({ error }, "FAILED_SAVING_FILE");
   });
 
+const getJoin = (userIds, { id, ...chat }) => {
+  const _isPresent = userIds.includes(id);
+
+  if (_isPresent)
+    return { id, message: "❌ You are already part of the team. 😘" };
+
+  saveNewUserIds(JSON.stringify({ ids: [...userIds, id] }));
   logAction("JOIN", userIds.length + 1, { chat, id });
 
   return {
@@ -39,11 +39,11 @@ const getJoin = (userIds, { id, ...chat }) => {
 };
 
 const getHelp = (userIds, { id, ...chat }) => {
-  const isPresent = userIds.includes(id);
+  const _isPresent = userIds.includes(id);
 
-  logAction("HELP", userIds.length, { chat, id }, isPresent);
+  logAction("HELP", userIds.length, { chat, id }, _isPresent);
 
-  if (isPresent)
+  if (_isPresent)
     return {
       id,
       message:
@@ -58,6 +58,7 @@ That is the amount of time that you have to choose the dates for the first and s
     id,
     message:
       "👋🏼 Press `Join` in order to join on the queue for fetching available vaccine appointments in Berlin.",
+    omit: false,
     options: {
       reply_markup: {
         inline_keyboard: [[{ text: "Join", callback_data: "join" }]],
@@ -67,16 +68,12 @@ That is the amount of time that you have to choose the dates for the first and s
 };
 
 const getStop = (userIds, { id, ...chat }) => {
-  const isPresent = userIds.includes(id);
+  const _isPresent = userIds.includes(id);
 
-  if (isPresent) {
+  if (_isPresent) {
     const filteredUserIds = userIds.filter((currentId) => currentId !== id);
-    const newUserIds = JSON.stringify({ ids: filteredUserIds });
 
-    fs.writeFileSync(paths.users.fileName, newUserIds, (error) => {
-      logger.error({ error }, "FAIL_SAVING_FILE");
-    });
-
+    saveNewUserIds(JSON.stringify({ ids: filteredUserIds }));
     logAction("STOP", userIds.length - 1, { chat, id });
 
     return {
@@ -107,4 +104,5 @@ module.exports = {
   getHelp,
   getJoin,
   getStop,
+  saveNewUserIds,
 };
