@@ -23,7 +23,7 @@ const ACTIONS = {
   },
 };
 const DISABLE_PAGE_PREVIEW = "disable_web_page_preview";
-const DEFAULT_TELEGRAM_MESSAGE_OPTIONS = {
+const DEFAULT_MESSAGE_OPTIONS = {
   [DISABLE_PAGE_PREVIEW]: true,
   parse_mode: "Markdown",
 };
@@ -43,16 +43,18 @@ const send = async ({ id, message, omit, options }) => {
 };
 
 const broadcast = (message, options = {}) => {
-  const mapUsersPromises = readUserIds().map((id) => {
-    return send({
-      id,
-      message,
-      omit: true,
-      options: { ...DEFAULT_TELEGRAM_MESSAGE_OPTIONS, ...options },
-    });
+  const mapUsersPromises = readUserIds().map((id, index) => {
+    setTimeout(() => {
+      return send({
+        id,
+        message,
+        omit: true,
+        options: { ...DEFAULT_MESSAGE_OPTIONS, ...options },
+      });
+    }, index * 200);
   });
 
-  return Promise.all(mapUsersPromises);
+  return Promise.race(mapUsersPromises);
 };
 
 // Listen to messages
@@ -65,7 +67,7 @@ bot.on("message", ({ chat, text: rawText }) => {
     const message = text.replace("/broadcast ", "📣 ");
 
     return broadcast(message, {
-      [TELEGRAM_DISABLE_PAGE_PREVIEW]: false,
+      [DISABLE_PAGE_PREVIEW]: false,
     }).then(() => logger.info(`📣 Broadcasted: "${text}"`, "SEND_BROADCAST"));
   }
 
