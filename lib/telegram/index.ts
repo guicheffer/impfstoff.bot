@@ -1,9 +1,12 @@
 import fs from 'fs'
 import TelegramBot, { SendMessageOptions } from 'node-telegram-bot-api'
 import { paths } from './paths'
-import { ids as adminIds } from '../../resources/telegram/admins.json'
 import { logger } from '../logger'
 import * as messages from './messages'
+
+const { ids: adminIds } = JSON.parse(fs.readFileSync('./resources/telegram/admins.json', 'utf-8')) as {
+  ids: number[]
+}
 
 const botToken = process.env.TOKEN
 

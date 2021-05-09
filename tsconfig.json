@@ -7,7 +7,6 @@
   ],
   "compilerOptions": {
     "outDir": "./built/lib",
-    "declarationDir": "./built/typings",
     "tsBuildInfoFile": "./built/buildcache",
     "resolveJsonModule": true,
     "target": "es2020",
