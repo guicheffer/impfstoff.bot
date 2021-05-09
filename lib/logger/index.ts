@@ -1,16 +1,16 @@
-const pino = require("pino");
+import pino from 'pino'
 
 const base = {
-  messageKey: "message",
+  messageKey: 'message',
   customAttributeKeys: {
-    req: "request",
-    res: "response",
-    err: "error",
+    req: 'request',
+    res: 'response',
+    err: 'error',
   },
   formatters: {
-    level: (label) => ({ level: label }),
+    level: (label: string) => ({ level: label }),
   },
-  ...(process.env.NODE_ENV === "production"
+  ...(process.env.NODE_ENV === 'production'
     ? {}
     : {
         /* 1 */ prettyPrint: {
@@ -19,18 +19,16 @@ const base = {
           levelFirst: true,
         },
       }),
-};
+}
 
-const logger = pino(
+export const logger = pino(
   {
     ...base,
-    name: "Server",
+    name: 'Server',
     serializers: {
       err: pino.stdSerializers.err,
       error: pino.stdSerializers.err,
     },
   },
-  pino.destination({ sync: false })
-);
-
-module.exports = logger;
+  pino.destination({ sync: false }),
+)
