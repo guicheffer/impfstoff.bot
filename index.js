@@ -4,9 +4,8 @@ const fetch = require("node-fetch");
 const bots = require("./bots.js");
 const logger = require("./logger");
 
-const API_FETCH_FROM_URL = `${process.env.API}?robot=1`;
-const DIFF_MIN = 5;
-const TIMER_BOT_FETCH = 1000;
+const DIFF_MIN = 5; // 5 minutes diff
+const TIMER_BOT_FETCH = 5 * 1000; // 5 seconds
 
 const urls = {
   arena: "https://bit.ly/2PL4I8J",
@@ -51,7 +50,7 @@ const checkFirstAvailableDate = (dates, dateKeys) => {
 setInterval(() => {
   let msgsQueue = [];
 
-  fetch(API_FETCH_FROM_URL, {
+  fetch(`${process.env.API}?robot=1`, {
     body: null,
     credentials: "omit",
     method: "GET",
