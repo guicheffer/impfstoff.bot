@@ -43,16 +43,19 @@ const send = async ({ id, message, omit, options }) => {
 };
 
 const broadcast = (message, options = {}) => {
-  const mapUsersPromises = readUserIds().map((id, index) => {
-    setTimeout(() => {
-      return send({
-        id,
-        message,
-        omit: true,
-        options: { ...DEFAULT_MESSAGE_OPTIONS, ...options },
-      });
-    }, index * 200);
-  });
+  // This will prioritize LIFO over the user ids when broadcasting
+  const mapUsersPromises = readUserIds()
+    .reverse()
+    .map((id, index) => {
+      setTimeout(() => {
+        return send({
+          id,
+          message,
+          omit: true,
+          options: { ...DEFAULT_MESSAGE_OPTIONS, ...options },
+        });
+      }, index * 200);
+    });
 
   return Promise.race(mapUsersPromises);
 };
