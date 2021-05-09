@@ -1,5 +1,5 @@
-import { broadcast } from './telegram'
+import telegram from './telegram'
 
 export function send(message: string): void {
-  broadcast(message)
+  telegram.broadcast(message)
 }

@@ -21,9 +21,8 @@ type AvailableDate = {
   availableDate: DateKey | null
   diffMins?: number
 }
-const usedQueue: {
-  [dateKey: string]: number | Date
-} = {}
+const usedQueue: { [dateKey: string]: number | Date } = {}
+
 function checkFirstAvailableDate(dates: ImpfstoffLinkVenue['stats'], dateKeys: DateKey[]): AvailableDate {
   for (let i = 0; i < dateKeys.length; i++) {
     const today = new Date()

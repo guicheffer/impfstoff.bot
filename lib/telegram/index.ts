@@ -52,18 +52,15 @@ const send = async ({ id, message, omit = true, options }: messages.Message) => 
 let blockedUserIds: number[] = []
 let shouldDebounceBroadcast = false
 
-export type BroadcastOptions = { force: boolean } & Partial<SendMessageOptions>
-export async function broadcast(
+type BroadcastOptions = { force: boolean } & Partial<SendMessageOptions>
+
+const broadcast = async (
   message: string,
   { force, ...options }: BroadcastOptions = { force: false },
-): Promise<void> {
+): Promise<void> => {
   // Force debounce on broadcast
-  if (!force && shouldDebounceBroadcast) {
-    return Promise.reject({ message: 'STILL_BROADCASTING', text: message })
-  }
-  if (!force) {
-    shouldDebounceBroadcast = true
-  }
+  if (!force && shouldDebounceBroadcast) return await Promise.reject({ message: 'STILL_BROADCASTING', text: message })
+  if (!force) shouldDebounceBroadcast = true
 
   const userIds = readUserIds()
 
@@ -183,3 +180,5 @@ bot.on('callback_query', async ({ data: action, message }) => {
 
 // Error all errors
 bot.on('polling_error', logger.error)
+
+export default { broadcast }
