@@ -1,8 +1,9 @@
-require("dotenv").config();
-const fetch = require("node-fetch");
+import dotenv from "dotenv"
+dotenv.config()
 
-const bots = require("./bots.js");
-const logger = require("./logger");
+import { send } from "./bots";
+import { logger } from "./logger";
+import { fetchImpfstoffLink, DateKey, ImpfstoffLinkVenue } from './impfstoff-link'
 
 const DIFF_MIN = 5; // 5 minutes diff
 const TIMER_BOT_FETCH = 2 * 1000; // 2 seconds
@@ -16,13 +17,19 @@ const urls = {
   erika: "https://bit.ly/2QIki5J",
 };
 
-const usedQueue = {};
-const checkFirstAvailableDate = (dates, dateKeys) => {
+type AvailableDate = {
+  availableDate: DateKey | null,
+  diffMins?: number
+}
+const usedQueue: {
+  [dateKey: string]: number | Date
+} = {};
+function checkFirstAvailableDate(dates: ImpfstoffLinkVenue['stats'], dateKeys: DateKey[]): AvailableDate {
   for (let i = 0; i < dateKeys.length; i++) {
     const today = new Date();
     const currentDate = dates[dateKeys[i]];
     const lastTime = new Date(currentDate.last);
-    const diffMs = lastTime - today;
+    const diffMs = lastTime.getTime() - today.getTime();
     const diffDays = Math.floor(diffMs / 86400000) * -1;
     const diffHrs = Math.floor((diffMs % 86400000) / 3600000) * -1;
     const diffMins = Math.round(((diffMs % 86400000) % 3600000) / 60000) * -1;
@@ -31,9 +38,12 @@ const checkFirstAvailableDate = (dates, dateKeys) => {
     if (diffHrs !== 1) continue;
 
     if (diffMins <= DIFF_MIN) {
-      if (usedQueue[dateKeys[i]]?.toString() === lastTime.toString()) return;
-      if ((diffMins === 0 || diffMins === 1) && usedQueue[dateKeys[i]] === 0)
-        return;
+      if (usedQueue[dateKeys[i]]?.toString() === lastTime.toString()) {
+        return { availableDate: null };
+      }
+      if ((diffMins === 0 || diffMins === 1) && usedQueue[dateKeys[i]] === 0) {
+        return { availableDate: null };
+      }
 
       if (diffMins === 0) {
         usedQueue[dateKeys[i]] = 0;
@@ -44,25 +54,19 @@ const checkFirstAvailableDate = (dates, dateKeys) => {
       return { availableDate: dateKeys[i], diffMins };
     }
   }
+  return { availableDate: null };
 };
 
 // Interval for checking vaccines appointment
 setInterval(() => {
-  let msgsQueue = [];
+  let msgsQueue: string[] = [];
 
-  fetch(`${process.env.API}?robot=1`, {
-    body: null,
-    credentials: "omit",
-    method: "GET",
-    mode: "cors",
-  })
-    .then((res) => res.json())
-    .then((json) => {
+  fetchImpfstoffLink().then((json) => {
       const { stats: places } = json;
 
       for (let i = 0; i < places.length; i++) {
         const dates = places[i].stats ?? {};
-        const dateKeys = Object.keys(dates);
+        const dateKeys: DateKey[] = Object.keys(dates) as DateKey[];
         const hasDates = Boolean(dateKeys.length);
         const place = places[i].id;
         const placeName = places[i].name;
@@ -70,7 +74,7 @@ setInterval(() => {
         if (!hasDates) continue;
 
         const { availableDate = null, diffMins } =
-          checkFirstAvailableDate(dates, dateKeys, placeName) ?? {};
+          checkFirstAvailableDate(dates, dateKeys) ?? {};
 
         if (availableDate) {
           const link = urls[place];
@@ -84,7 +88,7 @@ setInterval(() => {
         }
       }
 
-      msgsQueue.forEach((message) => bots.send(message));
+      msgsQueue.forEach((message) => send(message));
     })
     .catch((error) => logger.error({ error }, "FAILED_FETCH"));
 }, TIMER_BOT_FETCH);

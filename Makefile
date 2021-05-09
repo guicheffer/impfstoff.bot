@@ -9,10 +9,10 @@ help:
 
 amount: amount-check
 amount-check: ## Check the current amount of users in the bot
-	node -e 'const users = require("./telegram/resources/users.json"); console.log(users.ids.length)'
+	node -e 'const users = require("./resources/telegram/users.json"); console.log(users.ids.length)'
 
 clean: ## Clean up useful resources
-	cp ./telegram/resources/users.json .
+	cp ./resources/telegram/users.json .
 	make amount
 
 restart: ## Restart the app

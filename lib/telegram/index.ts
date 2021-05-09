@@ -1,11 +1,17 @@
-const fs = require("fs");
-const TelegramBot = require("node-telegram-bot-api");
-const paths = require("./paths.js");
-const adminIds = require("./resources/admins.json").ids;
-const logger = require("../logger");
-const messages = require("./messages");
+
+
+import fs from 'fs'
+import TelegramBot, { SendMessageOptions } from 'node-telegram-bot-api'
+import { paths } from './paths'
+import { ids as adminIds } from '../../resources/telegram/admins.json'
+import { logger } from '../logger'
+import * as messages from './messages'
 
 const botToken = process.env.TOKEN;
+
+if (!botToken) {
+  throw new Error('Please export the telegram bot token as TOKEN in your env')
+}
 const bot = new TelegramBot(botToken, { polling: true });
 
 const ACTIONS = {
@@ -23,30 +29,37 @@ const ACTIONS = {
   },
 };
 const DISABLE_PAGE_PREVIEW = "disable_web_page_preview";
-const DEFAULT_MESSAGE_OPTIONS = {
+const DEFAULT_MESSAGE_OPTIONS: Partial<SendMessageOptions> = {
   [DISABLE_PAGE_PREVIEW]: true,
   parse_mode: "Markdown",
 };
 
-const isJoinMessage = (text) => text.match(/start|join/);
-const isHelpMessage = (text) => text.match(/help|halp|what|hilfe|how/);
-const isStopMessage = (text) => text.match(/stop|leave|exit|pause|quiet|mute/);
+const isJoinMessage = (text: string) => text.match(/start|join/);
+const isHelpMessage = (text: string) => text.match(/help|halp|what|hilfe|how/);
+const isStopMessage = (text: string) => text.match(/stop|leave|exit|pause|quiet|mute/);
 
-const readUserIds = () => JSON.parse(fs.readFileSync(paths.users.fileName)).ids;
+function readUserIds (): number[] {
+  return JSON.parse(fs.readFileSync(paths.users.fileName, 'utf-8')).ids
+}
 
-const send = async ({ id, message, omit = true, options }) => {
+const send = async ({ id, message, omit = true, options }: messages.Message) => {
   if (!omit) logger.info({ id, message }, "SEND");
 
   await bot.sendMessage(id, message, options);
 };
 
-let blockedUserIds = [];
+let blockedUserIds: number[] = [];
 let shouldDebounceBroadcast = false;
-const broadcast = async (message, { force = false, ...options } = {}) => {
+
+export type BroadcastOptions = { force: boolean } & Partial<SendMessageOptions>
+export async function broadcast (message: string, { force, ...options }: BroadcastOptions = { force: false }): Promise<void> {
   // Force debounce on broadcast
-  if (!force && shouldDebounceBroadcast)
+  if (!force && shouldDebounceBroadcast) {
     return Promise.reject({ message: "STILL_BROADCASTING", text: message });
-  if (!force) shouldDebounceBroadcast = true;
+  }
+  if (!force) {
+    shouldDebounceBroadcast = true;
+  }
 
   const userIds = readUserIds();
 
@@ -55,7 +68,7 @@ const broadcast = async (message, { force = false, ...options } = {}) => {
   const mapUsersPromises = readUserIds()
     .reverse()
     .map(
-      (id, index) =>
+      (id: number, index: number) =>
         new Promise((resolve, reject) => {
           setTimeout(async () => {
             try {
@@ -104,9 +117,9 @@ const broadcast = async (message, { force = false, ...options } = {}) => {
 };
 
 // Listen to messages
-bot.on("message", ({ chat, text: rawText }) => {
+bot.on("message", ({ chat, text: rawText }: TelegramBot.Message) => {
   const { id } = chat;
-  const text = rawText.toLowerCase();
+  const text = rawText ? rawText.toLowerCase() : '';
 
   // Broadcast (only for admins)
   if (adminIds.includes(id) && text.startsWith("/broadcast")) {
@@ -154,11 +167,14 @@ bot.on("message", ({ chat, text: rawText }) => {
 
 // Listen to queries from inline keyboards
 bot.on("callback_query", async ({ data: action, message }) => {
+  if (!message) {
+    return
+  }
   const { chat } = message;
   const userIds = readUserIds();
   const messageId = message.message_id;
 
-  await bot.deleteMessage(chat.id, messageId);
+  await bot.deleteMessage(chat.id, messageId.toString(10));
 
   if (ACTIONS.join.enum === action)
     return send(messages.getJoin(userIds, chat));
@@ -170,5 +186,3 @@ bot.on("callback_query", async ({ data: action, message }) => {
 
 // Error all errors
 bot.on("polling_error", logger.error);
-
-module.exports = { broadcast };

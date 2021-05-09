@@ -4,7 +4,10 @@
   "description": "A bot for sending corona vaccines appointments to telegram and alexa",
   "main": "telegram+alexa.js",
   "scripts": {
-    "start": "node index.js"
+    "start": "node built/lib/index.js",
+    "start-dev": "ts-node lib/index.ts",
+    "build": "npm run clean && tsc",
+    "clean": "rm -rf built/"
   },
   "author": "@guicheffer",
   "license": "ISC",
@@ -15,6 +18,11 @@
     "pino": "^6.11.3"
   },
   "devDependencies": {
-    "pino-pretty": "^4.7.1"
+    "@types/node-fetch": "^2.5.10",
+    "@types/node-telegram-bot-api": "^0.51.1",
+    "@types/pino": "^6.3.8",
+    "pino-pretty": "^4.7.1",
+    "ts-node": "^9.1.1",
+    "typescript": "^4.2.4"
   }
 }

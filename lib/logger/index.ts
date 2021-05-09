@@ -1,4 +1,4 @@
-const pino = require("pino");
+import pino from 'pino'
 
 const base = {
   messageKey: "message",
@@ -8,7 +8,7 @@ const base = {
     err: "error",
   },
   formatters: {
-    level: (label) => ({ level: label }),
+    level: (label: string) => ({ level: label }),
   },
   ...(process.env.NODE_ENV === "production"
     ? {}
@@ -21,7 +21,7 @@ const base = {
       }),
 };
 
-const logger = pino(
+export const logger = pino(
   {
     ...base,
     name: "Server",
@@ -33,4 +33,3 @@ const logger = pino(
   pino.destination({ sync: false })
 );
 
-module.exports = logger;

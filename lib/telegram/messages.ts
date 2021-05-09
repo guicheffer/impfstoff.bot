@@ -1,9 +1,16 @@
-const fs = require("fs");
-const paths = require("./paths.js");
-const logger = require("../logger");
+import fs from 'fs'
+import { paths } from './paths'
+import { logger } from '../logger' 
+import TelegramBot from 'node-telegram-bot-api'
 
-const logAction = (action, amountUsers, { chat, id }, _isPresent) => {
-  const { first_name, username } = chat;
+export type Message = {
+  id: number
+  message: string
+  omit?: boolean
+  options?: TelegramBot.SendMessageOptions
+}
+const logAction = (action: string, amountUsers: number, chat: TelegramBot.Chat, _isPresent: boolean = false) => {
+  const { first_name, username, id } = chat;
 
   logger.info(
     {
@@ -17,19 +24,23 @@ const logAction = (action, amountUsers, { chat, id }, _isPresent) => {
   );
 };
 
-const saveNewUserIds = (userIds) =>
-  fs.writeFileSync(paths.users.fileName, userIds, (error) => {
+export function saveNewUserIds (userIds: string): void {
+  try {
+    fs.writeFileSync(paths.users.fileName, userIds)
+  } catch (error) {
     logger.error({ error }, "FAILED_SAVING_FILE");
-  });
+  }
+}
 
-const getJoin = (userIds, { id, ...chat }) => {
+export function getJoin (userIds: number[], chat: TelegramBot.Chat): Message {
+  const { id } = chat
   const _isPresent = userIds.includes(id);
 
   if (_isPresent)
     return { id, message: "❌ You are already part of the team. 😘" };
 
   saveNewUserIds(JSON.stringify({ ids: [...userIds, id] }));
-  logAction("JOIN", userIds.length + 1, { chat, id });
+  logAction("JOIN", userIds.length + 1, chat);
 
   return {
     id,
@@ -38,10 +49,11 @@ const getJoin = (userIds, { id, ...chat }) => {
   };
 };
 
-const getHelp = (userIds, { id, ...chat }) => {
+export function getHelp (userIds: number[], chat: TelegramBot.Chat): Message {
+  const { id } = chat
   const _isPresent = userIds.includes(id);
 
-  logAction("HELP", userIds.length, { chat, id }, _isPresent);
+  logAction("HELP", userIds.length, chat, _isPresent);
 
   if (_isPresent)
     return {
@@ -67,14 +79,15 @@ That is the amount of time that you have to choose the dates for the first and s
   };
 };
 
-const getStop = (userIds, { id, ...chat }) => {
+export function getStop (userIds: number[], chat: TelegramBot.Chat): Message {
+  const { id } = chat
   const _isPresent = userIds.includes(id);
 
   if (_isPresent) {
     const filteredUserIds = userIds.filter((currentId) => currentId !== id);
 
     saveNewUserIds(JSON.stringify({ ids: filteredUserIds }));
-    logAction("STOP", userIds.length - 1, { chat, id });
+    logAction("STOP", userIds.length - 1, chat);
 
     return {
       id,
@@ -98,11 +111,4 @@ const getStop = (userIds, { id, ...chat }) => {
       },
     },
   };
-};
-
-module.exports = {
-  getHelp,
-  getJoin,
-  getStop,
-  saveNewUserIds,
 };
