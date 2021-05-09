@@ -7,7 +7,8 @@
     "start": "node built/lib/index.js",
     "start-dev": "ts-node lib/index.ts",
     "build": "npm run clean && tsc",
-    "clean": "rm -rf built/"
+    "clean": "rm -rf built/",
+    "lint": "eslint --ext .ts ."
   },
   "author": "@guicheffer",
   "license": "ISC",
@@ -21,7 +22,13 @@
     "@types/node-fetch": "^2.5.10",
     "@types/node-telegram-bot-api": "^0.51.1",
     "@types/pino": "^6.3.8",
+    "@typescript-eslint/eslint-plugin": "^4.22.1",
+    "@typescript-eslint/parser": "^4.22.1",
+    "eslint": "^7.26.0",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-prettier": "^3.4.0",
     "pino-pretty": "^4.7.1",
+    "prettier": "^2.2.1",
     "ts-node": "^9.1.1",
     "typescript": "^4.2.4"
   }
