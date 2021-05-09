@@ -5,11 +5,11 @@ type DefaultIdsPayload = {
 }
 
 type PathInfo<T = DefaultIdsPayload> = {
-  default: T,
+  default: T
   fileName: string
 }
 
-const DEFAULT_IDS_PAYLOAD: DefaultIdsPayload = { ids: [] };
+const DEFAULT_IDS_PAYLOAD: DefaultIdsPayload = { ids: [] }
 
 type Admins = PathInfo
 type Users = PathInfo
@@ -24,22 +24,22 @@ type Paths = {
 export const paths: Paths = {
   admins: {
     default: DEFAULT_IDS_PAYLOAD,
-    fileName: "./resources/telegram/admins.json",
+    fileName: './resources/telegram/admins.json',
   },
   users: {
     default: DEFAULT_IDS_PAYLOAD,
-    fileName: "./resources/telegram/users.json",
+    fileName: './resources/telegram/users.json',
   },
   usersSettings: {
     default: {},
-    fileName: "./resources/telegram/users-settings.json",
+    fileName: './resources/telegram/users-settings.json',
   },
-};
+}
 
 for (const path of Object.values(paths)) {
   if (!fs.existsSync(path.fileName)) {
     fs.writeFileSync(path.fileName, JSON.stringify(path.default), {
-      flag: "wx",
-    });
+      flag: 'wx',
+    })
   }
 }
