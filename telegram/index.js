@@ -34,30 +34,56 @@ const isStopMessage = (text) => text.match(/stop|leave|exit|pause|quiet|mute/);
 
 const readUserIds = () => JSON.parse(fs.readFileSync(paths.users.fileName)).ids;
 
-const send = async ({ id, message, omit, options }) => {
+const send = async ({ id, message, omit = true, options }) => {
   if (!omit) logger.info({ id, message }, "SEND");
 
-  await bot.sendMessage(id, message, options).catch((error) => {
-    logger.error({ error, id }, "FAILED_TO_SEND");
-  });
+  await bot.sendMessage(id, message, options);
 };
 
-const broadcast = (message, options = {}) => {
+const broadcast = async (message, options = {}) => {
+  let blockedUserIds = [];
+
   // This will prioritize LIFO over the user ids when broadcasting
   const mapUsersPromises = readUserIds()
     .reverse()
-    .map((id, index) => {
-      setTimeout(() => {
-        return send({
-          id,
-          message,
-          omit: true,
-          options: { ...DEFAULT_MESSAGE_OPTIONS, ...options },
-        });
-      }, index * 200);
-    });
+    .map(
+      (id, index) =>
+        new Promise((resolve, reject) => {
+          setTimeout(async () => {
+            try {
+              return resolve(
+                await send({
+                  id,
+                  message,
+                  options: { ...DEFAULT_MESSAGE_OPTIONS, ...options },
+                })
+              );
+            } catch (error) {
+              logger.error({ error, id }, "BLOCKED_USER_TO_REMOVE");
 
-  return Promise.race(mapUsersPromises);
+              blockedUserIds.push(id);
+
+              reject(error);
+            }
+          }, index * 200);
+        })
+    );
+
+  await Promise.all(mapUsersPromises)
+    .finally(() => {
+      if (blockedUserIds.length) {
+        const userIdsWithoutBlockedOnes = readUserIds().filter(
+          (currentId) => !blockedUserIds.includes(currentId)
+        );
+
+        messages.saveNewUserIds(
+          JSON.stringify({ ids: userIdsWithoutBlockedOnes })
+        );
+
+        logger.warn({ amount: blockedUserIds.length }, "REMOVED_USERS");
+      }
+    })
+    .catch(() => {}); // No needs to log all promises
 };
 
 // Listen to messages
@@ -95,6 +121,7 @@ bot.on("message", ({ chat, text: rawText }) => {
     id,
     message:
       "🤔 Not sure what you mean, but maybe one of the following options can help you:",
+    omit: false,
     options: {
       reply_markup: {
         inline_keyboard: buttons,
