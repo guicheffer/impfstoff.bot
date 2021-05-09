@@ -6,6 +6,7 @@ import TelegramBot from 'node-telegram-bot-api'
 export type Message = {
   id: number
   message: string
+  text?: string
   omit?: boolean
   options?: TelegramBot.SendMessageOptions
 }

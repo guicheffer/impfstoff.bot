@@ -43,8 +43,8 @@ function readUserIds(): number[] {
   return JSON.parse(fs.readFileSync(paths.users.fileName, 'utf-8')).ids
 }
 
-const send = async ({ id, message, omit = true, options }: messages.Message) => {
-  if (!omit) logger.info({ id, message }, 'SEND')
+const send = async ({ id, message, omit = true, options, text = undefined }: messages.Message) => {
+  if (!omit) logger.info({ id, message, text }, 'SEND')
 
   await bot.sendMessage(id, message, options)
 }
@@ -142,7 +142,7 @@ bot.on('message', ({ chat, text: rawText }: TelegramBot.Message) => {
   if (isHelpMessage(text)) return send(messages.getHelp(userIds, chat))
   if (text.startsWith('/contribute')) return send(messages.getContribute(chat))
 
-  // Otherwise:
+  /* Otherwise show helper actions in buttons style */
   const buttons = [[{ text: ACTIONS.help.copy, callback_data: ACTIONS.help.enum }]]
 
   buttons.unshift(
@@ -155,6 +155,7 @@ bot.on('message', ({ chat, text: rawText }: TelegramBot.Message) => {
     id,
     message: '🤔 Not sure what you mean, but maybe one of the following options can help you:',
     omit: false,
+    text,
     options: {
       reply_markup: {
         inline_keyboard: buttons,
