@@ -1,17 +1,21 @@
 {
   "name": "impfstoff.bot",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A bot for sending corona vaccines appointments to telegram and alexa",
-  "main": "telegram+alexa.js",
+  "main": "built/lib/index.js",
   "scripts": {
-    "start": "node built/lib/index.js",
-    "start-dev": "ts-node lib/index.ts",
+    "start": "npm run build && node built/lib/index.js",
+    "start:dev": "ts-node lib/index.ts",
     "build": "npm run clean && tsc",
     "clean": "rm -rf built/",
     "lint": "eslint --ext .ts ."
   },
   "author": "@guicheffer",
   "license": "ISC",
+  "engines": {
+    "npm": "7",
+    "node": "14"
+  },
   "dependencies": {
     "dotenv": "^9.0.0",
     "node-fetch": "^2.6.1",
