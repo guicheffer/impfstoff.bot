@@ -10,7 +10,7 @@ export type Message = {
   omit?: boolean
   options?: TelegramBot.SendMessageOptions
 }
-const logAction = (action: string, amountUsers: number, chat: TelegramBot.Chat, _isPresent = false) => {
+const logAction = (action: string, chat: TelegramBot.Chat, amountUsers?: number, _isPresent = false) => {
   const { first_name, username, id } = chat
 
   logger.info(
@@ -40,7 +40,7 @@ export function getJoin(userIds: number[], chat: TelegramBot.Chat): Message {
   if (_isPresent) return { id, message: '❌ You are already part of the team. 😘' }
 
   saveNewUserIds(JSON.stringify({ ids: [...userIds, id] }))
-  logAction('JOIN', userIds.length + 1, chat)
+  logAction('JOIN', chat, userIds.length + 1)
 
   return {
     id,
@@ -53,7 +53,7 @@ export function getHelp(userIds: number[], chat: TelegramBot.Chat): Message {
   const { id } = chat
   const _isPresent = userIds.includes(id)
 
-  logAction('HELP', userIds.length, chat, _isPresent)
+  logAction('HELP', chat, userIds.length, _isPresent)
 
   if (_isPresent)
     return {
@@ -86,7 +86,7 @@ export function getStop(userIds: number[], chat: TelegramBot.Chat): Message {
     const filteredUserIds = userIds.filter((currentId) => currentId !== id)
 
     saveNewUserIds(JSON.stringify({ ids: filteredUserIds }))
-    logAction('STOP', userIds.length - 1, chat)
+    logAction('STOP', chat, userIds.length - 1)
 
     return {
       id,
@@ -113,6 +113,8 @@ export function getStop(userIds: number[], chat: TelegramBot.Chat): Message {
 
 export function getContribute(chat: TelegramBot.Chat): Message {
   const { id } = chat
+
+  logAction('CONTRIBUTE', chat)
 
   return {
     id,

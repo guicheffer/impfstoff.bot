@@ -36,8 +36,8 @@ const DEFAULT_MESSAGE_OPTIONS: Partial<SendMessageOptions> = {
 }
 
 const isJoinMessage = (text: string) => text.match(/start|join/)
-const isHelpMessage = (text: string) => text.match(/help|halp|what|hilfe|how/)
-const isStopMessage = (text: string) => text.match(/stop|leave|exit|pause|quiet|mute/)
+const isHelpMessage = (text: string) => text.match(/help|halp|what|hilfe|how|when/)
+const isStopMessage = (text: string) => text.match(/stop|leave|exit|pause|quiet|mute|end|finish|shut/)
 
 function readUserIds(): number[] {
   return JSON.parse(fs.readFileSync(paths.users.fileName, 'utf-8')).ids
@@ -140,7 +140,7 @@ bot.on('message', ({ chat, text: rawText }: TelegramBot.Message) => {
   if (isJoinMessage(text)) return send(messages.getJoin(userIds, chat))
   if (isStopMessage(text)) return send(messages.getStop(userIds, chat))
   if (isHelpMessage(text)) return send(messages.getHelp(userIds, chat))
-  if (text.startsWith('/contribute')) return send(messages.getContribute(chat))
+  if (text.startsWith('/contribute') || text.startsWith('/share')) return send(messages.getContribute(chat))
 
   /* Otherwise show helper actions in buttons style */
   const buttons = [[{ text: ACTIONS.help.copy, callback_data: ACTIONS.help.enum }]]
