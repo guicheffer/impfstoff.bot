@@ -1,10 +1,6 @@
 {
-  "include": [
-    "./lib/**/*",
-  ],
-  "exclude": [
-    "./node_modules"
-  ],
+  "include": ["./lib/**/*"],
+  "exclude": ["./node_modules"],
   "compilerOptions": {
     "outDir": "./built/lib",
     "tsBuildInfoFile": "./built/buildcache",
@@ -12,10 +8,7 @@
     "target": "es2020",
     "esModuleInterop": true,
     "module": "commonjs",
-    "lib": [
-      "es2020",
-      "esnext"
-    ],
+    "lib": ["es2020", "esnext", "dom"],
     "sourceMap": true,
     "moduleResolution": "node",
     "noUnusedLocals": true,
