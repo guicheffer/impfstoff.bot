@@ -4,7 +4,7 @@ import { paths } from './paths'
 import { logger } from '../logger'
 import * as messages from './messages'
 
-const { ids: adminIds } = JSON.parse(fs.readFileSync('./resources/telegram/admins.json', 'utf-8')) as {
+const { ids: adminIds } = JSON.parse(fs.readFileSync(paths.admins.fileName, 'utf-8')) as {
   ids: number[]
 }
 
