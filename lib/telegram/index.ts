@@ -8,7 +8,7 @@ const { ids: adminIds } = JSON.parse(fs.readFileSync(paths.admins.fileName, 'utf
   ids: number[]
 }
 
-const botToken = process.env.TOKEN
+const botToken = process.env.TELEGRAM_TOKEN
 
 if (!botToken) {
   throw new Error('Please export the telegram bot token as TOKEN in your env')
