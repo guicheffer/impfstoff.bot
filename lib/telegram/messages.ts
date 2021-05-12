@@ -116,7 +116,7 @@ export function getTwitter(chat: TelegramBot.Chat): Message {
 
   return {
     id,
-    message: '🐥 Also, check out our Twitter bot as well here: https://twitter.com/impfstoffBot',
+    message: '🐥 Also, check out our Twitter bot here: https://twitter.com/impfstoffBot ❤️',
   }
 }
 
