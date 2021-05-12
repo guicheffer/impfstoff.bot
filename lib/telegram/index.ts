@@ -36,8 +36,8 @@ const DEFAULT_MESSAGE_OPTIONS: Partial<SendMessageOptions> = {
 }
 
 const isJoinMessage = (text: string) => text.match(/start|join/)
-const isHelpMessage = (text: string) => text.match(/help|halp|what|hilfe|how|when/)
-const isStopMessage = (text: string) => text.match(/stop|leave|exit|pause|quiet|mute|end|finish|shut/)
+const isHelpMessage = (text: string) => text.match(/help|halp|what|hilfe|how|when|vaccine|impfstoff/)
+const isStopMessage = (text: string) => text.match(/stop|spot|spto|sopt|leave|exit|pause|quiet|mute|end|finish|shut/)
 
 function readUserIds(): number[] {
   return JSON.parse(fs.readFileSync(paths.users.fileName, 'utf-8')).ids
@@ -81,7 +81,10 @@ const broadcast = async (
                 }),
               )
             } catch (error) {
-              if (error.message.includes('bot was blocked by the user')) {
+              if (
+                error.message.includes('bot was blocked by the user') ||
+                error.mesage.includes('bot was kicked from the group chat')
+              ) {
                 blockedUserIds.push(id)
                 logger.error({ error, id }, 'BLOCKED_USER_TO_REMOVE')
               } else {
@@ -119,27 +122,27 @@ const broadcast = async (
 // Listen to messages
 bot.on('message', ({ chat, text: rawText }: TelegramBot.Message) => {
   const { id } = chat
-  const text = rawText ? rawText.toLowerCase() : ''
 
   // Broadcast (only for admins)
-  if (adminIds.includes(id) && text.startsWith('/broadcast')) {
-    const message = text.replace('/broadcast ', '📣 ')
+  if (adminIds.includes(id) && rawText?.startsWith('/broadcast')) {
+    const message = rawText?.replace('/broadcast ', '📣 ')
 
     return broadcast(message, {
       force: true, // Force broadcast to happen since it's a manual announcement
       [DISABLE_PAGE_PREVIEW]: false,
     })
-      .then(() => logger.info(`📣 Broadcasted: "${text}"`, 'SEND_BROADCAST'))
+      .then(() => logger.info(`📣 Broadcasted: "${rawText}"`, 'SEND_BROADCAST'))
       .catch((error) => {
         logger.error(error)
       })
   }
 
   const userIds = readUserIds()
+  const text = rawText ? rawText.toLowerCase() : ''
 
-  if (isJoinMessage(text)) return send(messages.getJoin(userIds, chat))
-  if (isStopMessage(text)) return send(messages.getStop(userIds, chat))
-  if (isHelpMessage(text)) return send(messages.getHelp(userIds, chat))
+  if (isJoinMessage(text)) return send(messages.getJoin(userIds, chat)).then(() => send(messages.getTwitter(chat)))
+  if (isStopMessage(text)) return send(messages.getStop(userIds, chat)).then(() => send(messages.getTwitter(chat)))
+  if (isHelpMessage(text)) return send(messages.getHelp(userIds, chat)).then(() => send(messages.getTwitter(chat)))
   if (text.startsWith('/contribute') || text.startsWith('/share')) return send(messages.getContribute(chat))
 
   /* Otherwise show helper actions in buttons style */

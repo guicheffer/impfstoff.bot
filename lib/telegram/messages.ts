@@ -111,6 +111,15 @@ export function getStop(userIds: number[], chat: TelegramBot.Chat): Message {
   }
 }
 
+export function getTwitter(chat: TelegramBot.Chat): Message {
+  const { id } = chat
+
+  return {
+    id,
+    message: '🐥 Also, check out our Twitter bot as well here: https://twitter.com/impfstoffBot',
+  }
+}
+
 export function getContribute(chat: TelegramBot.Chat): Message {
   const { id } = chat
 
