@@ -2,7 +2,7 @@
   "include": ["./lib/**/*"],
   "exclude": ["./node_modules"],
   "compilerOptions": {
-    "outDir": "./built/lib",
+    "outDir": "./built",
     "tsBuildInfoFile": "./built/buildcache",
     "resolveJsonModule": true,
     "target": "es2020",
