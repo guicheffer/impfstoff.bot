@@ -35,9 +35,10 @@ const DEFAULT_MESSAGE_OPTIONS: Partial<SendMessageOptions> = {
   parse_mode: 'Markdown',
 }
 
-const isJoinMessage = (text: string) => text.match(/start|join/)
+const isJoinMessage = (text: string) => text.match(/start|join|subscribe/)
 const isHelpMessage = (text: string) => text.match(/help|halp|what|hilfe|how|when|vaccine|impfstoff/)
-const isStopMessage = (text: string) => text.match(/stop|spot|spto|sopt|leave|exit|pause|quiet|mute|end|finish|shut/)
+const isStopMessage = (text: string) =>
+  text.match(/stop|spot|spto|sopt|leave|exit|pause|quiet|mute|end|finish|shut|unsubscribe/)
 
 function readUserIds(): number[] {
   return JSON.parse(fs.readFileSync(paths.users.fileName, 'utf-8')).ids
