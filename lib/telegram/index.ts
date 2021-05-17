@@ -85,6 +85,7 @@ const broadcast = async (
               if (
                 error.message.includes('bot was blocked by the user') ||
                 error.message.includes('user is deactivated') ||
+                error.message.includes('group chat was deactivated') ||
                 error.message.includes('bot was kicked from the group chat')
               ) {
                 blockedUserIds.push(id)
