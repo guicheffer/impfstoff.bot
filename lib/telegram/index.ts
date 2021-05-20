@@ -102,7 +102,7 @@ const broadcast = async (
 
               reject(error)
             }
-            /* This will make 30 messages be sent in a second
+            /* This will make 30 messages to be sent in a second.
              * (max. telegram limit)
              *
              * https://core.telegram.org/bots/faq#broadcasting-to-users
@@ -182,7 +182,7 @@ bot.on('message', ({ chat, text: rawText }: TelegramBot.Message) => {
 
   return send({
     id,
-    message: '🤔 Not sure what you mean, but maybe one of the following options can help you:',
+    message: '🤔 Not sure what you mean, but maybe one of the following options might help you:',
     omit: false,
     text,
     options: {
