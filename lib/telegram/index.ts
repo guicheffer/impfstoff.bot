@@ -40,11 +40,11 @@ const DEFAULT_MESSAGE_OPTIONS: Partial<SendMessageOptions> = {
   parse_mode: 'Markdown',
 }
 
-const isContributeMessage = (text: string) => text.match(/contribute|feature/)
+const isContributeMessage = (text: string) => text.match(/hey|hi|hello|contribute|feature/)
 const isJoinMessage = (text: string) => text.match(/start|join|subscribe/)
 const isHelpMessage = (text: string) => text.match(/help|halp|what|hilfe|how|when|vaccine|impfstoff/)
 const isStopMessage = (text: string) =>
-  text.match(/stop|spot|spto|sopt|leave|exit|pause|quiet|mute|end|finish|shut|unsubscribe/)
+  text.match(/stop|spot|spto|sopt|sotp|leave|exit|pause|quiet|mute|end|finish|shut|unsubscribe/)
 
 function readUserIds(): number[] {
   return JSON.parse(fs.readFileSync(paths.users.fileName, 'utf-8')).ids
