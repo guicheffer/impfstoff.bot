@@ -15,7 +15,11 @@ if (!botToken) {
 }
 const bot = new TelegramBot(botToken, { polling: true })
 
-const ACTIONS = {
+export const ACTIONS = {
+  contribute: {
+    copy: 'Contribute',
+    enum: 'contribute',
+  },
   help: {
     copy: 'Help',
     enum: 'help',
@@ -29,7 +33,8 @@ const ACTIONS = {
     enum: 'stop',
   },
 }
-const DISABLE_PAGE_PREVIEW = 'disable_web_page_preview'
+
+export const DISABLE_PAGE_PREVIEW = 'disable_web_page_preview'
 const DEFAULT_MESSAGE_OPTIONS: Partial<SendMessageOptions> = {
   [DISABLE_PAGE_PREVIEW]: true,
   parse_mode: 'Markdown',
@@ -156,10 +161,13 @@ bot.on('message', ({ chat, text: rawText }: TelegramBot.Message) => {
   if (isStopMessage(text)) return send(messages.getStop(userIds, chat))
 
   if (isContributeMessage(text) || text.startsWith('/contribute') || text.startsWith('/share'))
-    return send(messages.getContribute(chat))
+    return send(messages.getContribute(chat, true))
 
   /* Otherwise show helper actions in buttons style */
-  const buttons = [[{ text: ACTIONS.help.copy, callback_data: ACTIONS.help.enum }]]
+  const buttons = [
+    [{ text: ACTIONS.help.copy, callback_data: ACTIONS.help.enum }],
+    [{ text: ACTIONS.contribute.copy, callback_data: ACTIONS.contribute.enum }],
+  ]
 
   buttons.unshift(
     userIds.includes(id)
@@ -200,6 +208,7 @@ bot.on('callback_query', async ({ data: action, message }) => {
       return send(messages.getContribute(chat)).then(() => send(messages.getTwitter(chat)))
     })
   if (ACTIONS.stop.enum === action) return send(messages.getStop(userIds, chat))
+  if (ACTIONS.contribute.enum === action) return send(messages.getContribute(chat, true))
 })
 
 // Error all errors

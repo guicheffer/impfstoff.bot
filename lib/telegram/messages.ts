@@ -2,6 +2,7 @@ import fs from 'fs'
 import { paths } from './paths'
 import { logger } from '../logger'
 import TelegramBot from 'node-telegram-bot-api'
+import { ACTIONS, DISABLE_PAGE_PREVIEW } from '.'
 
 export type Message = {
   id: number
@@ -72,7 +73,10 @@ That is the amount of time that you have to choose the dates for the first and s
     omit: false,
     options: {
       reply_markup: {
-        inline_keyboard: [[{ text: 'Join', callback_data: 'join' }]],
+        inline_keyboard: [
+          [{ text: ACTIONS.join.copy, callback_data: ACTIONS.join.enum }],
+          [{ text: ACTIONS.contribute.copy, callback_data: ACTIONS.contribute.enum }],
+        ],
       },
     },
   }
@@ -94,7 +98,10 @@ export function getStop(userIds: number[], chat: TelegramBot.Chat): Message {
         '👋🏼 Ok, we will no longer send you any messages. If you want to join us again, just press `Join` below. ❤️',
       options: {
         reply_markup: {
-          inline_keyboard: [[{ text: 'Join', callback_data: 'join' }]],
+          inline_keyboard: [
+            [{ text: ACTIONS.join.copy, callback_data: ACTIONS.join.enum }],
+            [{ text: ACTIONS.contribute.copy, callback_data: ACTIONS.contribute.enum }],
+          ],
         },
       },
     }
@@ -105,7 +112,7 @@ export function getStop(userIds: number[], chat: TelegramBot.Chat): Message {
     message: "☑️ You've already been removed. If you want to join us again, just press `Join` below. ❤️",
     options: {
       reply_markup: {
-        inline_keyboard: [[{ text: 'Join', callback_data: 'join' }]],
+        inline_keyboard: [[{ text: ACTIONS.join.copy, callback_data: ACTIONS.join.enum }]],
       },
     },
   }
@@ -117,23 +124,30 @@ export function getTwitter(chat: TelegramBot.Chat): Message {
   return {
     id,
     message: '🐥 Also, check out our Twitter bot here: https://twitter.com/impfstoffBot ❤️',
+    options: {
+      [DISABLE_PAGE_PREVIEW]: true,
+    },
   }
 }
 
-export function getContribute(chat: TelegramBot.Chat): Message {
+export function getContribute(chat: TelegramBot.Chat, shouldLog = false): Message {
   const { id } = chat
 
-  logAction('CONTRIBUTE', chat)
+  if (shouldLog) logAction('CONTRIBUTE', chat)
 
   return {
     id,
+    options: {
+      [DISABLE_PAGE_PREVIEW]: true,
+    },
     message: `Hey ${
       chat.first_name || 'you'
     }, there are a few ways you may contribute with the bot! I appreciate your interest in advance, whatever it is! 💖\n\n\
 Since there is involved costs in aws machines and efforts around an open-source project in GitHub (link at the bottom), the options are:\n\n\
-- 💰 Use PayPal for whatever amount you wish: https://paypal.me/guicheffer\n\
-- 🍺 Buy me a beer: https://www.buymeacoffee.com/guicheffer\n\
-- ❗️ Open issues and pull requests in our Repo here: https://github.com/guicheffer/impfstoff.bot\n\n\
+💰 Use PayPal for whatever amount you wish: https://paypal.me/guicheffer\n\
+🍺 Buy me a beer: https://www.buymeacoffee.com/guicheffer\n\
+❗️ Open issues and pull requests in our repo here: https://github.com/guicheffer/impfstoff.bot\n
+🗣 Feel free to give your feedback on this Reddit thread: https://www.reddit.com/r/berlin/comments/mzo067/availability_of_appointments_for_the_vaccination/\n\n\
 I am happy to help you finding vaccine slots and we'll be definitely adding new features and fixes into this and the twitter bot. I appreciate your help! ❤️`,
   }
 }
