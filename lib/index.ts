@@ -80,7 +80,7 @@ setInterval(() => {
           const date = new Date(availableDate).toLocaleDateString('de-DE')
           const seen = diffMins === 0 ? 'just now' : `seen ${diffMins} mins ago`
 
-          msgsQueue.push(`💉 Appointments on _${placeName}_ available on *${date}* at ${link} (_${seen}_)`)
+          msgsQueue.push(`💉 Slots available in _${placeName}_ on *${date}* at ${link} (_${seen}_)`)
         }
       }
 
