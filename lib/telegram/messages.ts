@@ -147,7 +147,7 @@ Since there is involved costs in aws machines and efforts around an open-source 
 💰 Use PayPal for whatever amount you wish: https://paypal.me/guicheffer\n\
 🍺 Buy me a beer: https://www.buymeacoffee.com/guicheffer\n\
 ❗️ Open issues and pull requests in our repo here: https://github.com/guicheffer/impfstoff.bot\n
-🗣 Feel free to give your feedback on this Reddit thread: https://www.reddit.com/r/berlin/comments/mzo067/availability_of_appointments_for_the_vaccination/\n\n\
+📢 Feel free to give your feedback on this Reddit thread: https://www.reddit.com/r/berlin/comments/mzo067/availability_of_appointments_for_the_vaccination/\n\n\
 I am happy to help you finding vaccine slots and we'll be definitely adding new features and fixes into this and the twitter bot. I appreciate your help! ❤️`,
   }
 }
