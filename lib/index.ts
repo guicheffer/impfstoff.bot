@@ -17,10 +17,7 @@ const urls = {
   erika: 'https://bit.ly/2QIki5J',
 }
 
-type AvailableDate = {
-  availableDate: DateKey | null
-  diffMins?: number
-}
+type AvailableDate = { availableDate: DateKey | null }
 const usedQueue: { [dateKey: string]: number | Date } = {}
 
 function checkFirstAvailableDate(dates: ImpfstoffLinkVenue['stats'], dateKeys: DateKey[]): AvailableDate {
@@ -50,7 +47,7 @@ function checkFirstAvailableDate(dates: ImpfstoffLinkVenue['stats'], dateKeys: D
         usedQueue[dateKeys[i]] = lastTime
       }
 
-      return { availableDate: dateKeys[i], diffMins }
+      return { availableDate: dateKeys[i] }
     }
   }
   return { availableDate: null }
@@ -73,14 +70,13 @@ setInterval(() => {
 
         if (!hasDates) continue
 
-        const { availableDate = null, diffMins } = checkFirstAvailableDate(dates, dateKeys) ?? {}
+        const { availableDate = null } = checkFirstAvailableDate(dates, dateKeys) ?? {}
 
         if (availableDate) {
           const link = urls[place]
           const date = new Date(availableDate).toLocaleDateString('de-DE')
-          const seen = diffMins === 0 ? 'just now' : `seen ${diffMins} mins ago`
 
-          msgsQueue.push(`💉 Slots available in _${placeName}_ on *${date}* at ${link} (_${seen}_)`)
+          msgsQueue.push(`💉 Available slots in _${placeName}_ on *${date}* at ${link}`)
         }
       }
 
