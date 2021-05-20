@@ -35,6 +35,7 @@ const DEFAULT_MESSAGE_OPTIONS: Partial<SendMessageOptions> = {
   parse_mode: 'Markdown',
 }
 
+const isContributeMessage = (text: string) => text.match(/contribute|feature/)
 const isJoinMessage = (text: string) => text.match(/start|join|subscribe/)
 const isHelpMessage = (text: string) => text.match(/help|halp|what|hilfe|how|when|vaccine|impfstoff/)
 const isStopMessage = (text: string) =>
@@ -153,7 +154,9 @@ bot.on('message', ({ chat, text: rawText }: TelegramBot.Message) => {
     })
 
   if (isStopMessage(text)) return send(messages.getStop(userIds, chat))
-  if (text.startsWith('/contribute') || text.startsWith('/share')) return send(messages.getContribute(chat))
+
+  if (isContributeMessage(text) || text.startsWith('/contribute') || text.startsWith('/share'))
+    return send(messages.getContribute(chat))
 
   /* Otherwise show helper actions in buttons style */
   const buttons = [[{ text: ACTIONS.help.copy, callback_data: ACTIONS.help.enum }]]
