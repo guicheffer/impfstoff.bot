@@ -102,12 +102,12 @@ const broadcast = async (
 
               reject(error)
             }
-            /* This will make 30 messages to be sent in a second.
-             * (max. telegram limit)
+            /* This will make ~30 messages to be sent in a second, considering
+             * its potential duplicated messages as well; (max. telegram limit)
              *
              * https://core.telegram.org/bots/faq#broadcasting-to-users
              */
-          }, index * 35)
+          }, index * 40)
         }),
     )
 
