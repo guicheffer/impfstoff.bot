@@ -143,8 +143,15 @@ bot.on('message', ({ chat, text: rawText }: TelegramBot.Message) => {
   const userIds = readUserIds()
   const text = rawText ? rawText.toLowerCase() : ''
 
-  if (isJoinMessage(text)) return send(messages.getJoin(userIds, chat)).then(() => send(messages.getTwitter(chat)))
-  if (isHelpMessage(text)) return send(messages.getHelp(userIds, chat)).then(() => send(messages.getTwitter(chat)))
+  if (isJoinMessage(text))
+    return send(messages.getJoin(userIds, chat)).then(() => {
+      return send(messages.getContribute(chat)).then(() => send(messages.getTwitter(chat)))
+    })
+  if (isHelpMessage(text))
+    return send(messages.getHelp(userIds, chat)).then(() => {
+      return send(messages.getContribute(chat)).then(() => send(messages.getTwitter(chat)))
+    })
+
   if (isStopMessage(text)) return send(messages.getStop(userIds, chat))
   if (text.startsWith('/contribute') || text.startsWith('/share')) return send(messages.getContribute(chat))
 
@@ -182,9 +189,13 @@ bot.on('callback_query', async ({ data: action, message }) => {
   await bot.deleteMessage(chat.id, messageId.toString(10))
 
   if (ACTIONS.join.enum === action)
-    return send(messages.getJoin(userIds, chat)).then(() => send(messages.getTwitter(chat)))
+    return send(messages.getJoin(userIds, chat)).then(() => {
+      return send(messages.getContribute(chat)).then(() => send(messages.getTwitter(chat)))
+    })
   if (ACTIONS.help.enum === action)
-    return send(messages.getHelp(userIds, chat)).then(() => send(messages.getTwitter(chat)))
+    return send(messages.getHelp(userIds, chat)).then(() => {
+      return send(messages.getContribute(chat)).then(() => send(messages.getTwitter(chat)))
+    })
   if (ACTIONS.stop.enum === action) return send(messages.getStop(userIds, chat))
 })
 

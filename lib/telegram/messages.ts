@@ -127,7 +127,13 @@ export function getContribute(chat: TelegramBot.Chat): Message {
 
   return {
     id,
-    message:
-      '❤️ If you would like to contribute with us, please check this repo: https://github.com/guicheffer/impfstoff.bot',
+    message: `Hey ${
+      chat.first_name || 'you'
+    }, there are a few ways you may contribute with the bot! I appreciate your interest in advance, whatever it is! 💖\n\n\
+Since there is involved costs in aws machines and efforts around an open-source project in GitHub (link at the bottom), the options are:\n\n\
+- 💰 Use PayPal for whatever amount you wish: https://paypal.me/guicheffer\n\
+- 🍺 Buy me a beer: https://www.buymeacoffee.com/guicheffer\n\
+- ❗️ Open issues and pull requests in our Repo here: https://github.com/guicheffer/impfstoff.bot\n\n\
+I am happy to help you finding vaccine slots and we'll be definitely adding new features and fixes into this and the twitter bot. I appreciate your help! ❤️`,
   }
 }
