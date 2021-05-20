@@ -102,8 +102,12 @@ const broadcast = async (
 
               reject(error)
             }
-            // This will make 5 message be sent in a second (max. telegram limit)
-          }, index * 200)
+            /* This will make 30 messages be sent in a second
+             * (max. telegram limit)
+             *
+             * https://core.telegram.org/bots/faq#broadcasting-to-users
+             */
+          }, index * 35)
         }),
     )
 
