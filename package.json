@@ -17,7 +17,7 @@
     "node": "14"
   },
   "dependencies": {
-    "dotenv": "^9.0.2",
+    "dotenv": "^10.0.0",
     "node-fetch": "^2.6.1",
     "node-telegram-bot-api": "^0.53.0",
     "pino": "^6.11.3",
