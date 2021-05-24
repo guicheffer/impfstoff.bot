@@ -45,7 +45,7 @@ const isJoinMessage = (text: string) => text.match(/start|join|subscribe/)
 const isHelpMessage = (text: string) =>
   text.match(/help|hepl|hpel|halp|unavailable|filter|what|hilfe|how|when|vaccine|impfstoff/)
 const isStopMessage = (text: string) =>
-  text.match(/stop|spot|spto|sopt|sotp|leave|exit|pause|quiet|mute|end|finish|shut|unsubscribe|off/)
+  text.match(/stop|spot|spto|sopt|sotp|leave|delete|exit|pause|quiet|mute|end|finish|shut|unsubscribe|off/)
 
 function readUserIds(): number[] {
   return JSON.parse(fs.readFileSync(paths.users.fileName, 'utf-8')).ids
