@@ -43,7 +43,9 @@ const DEFAULT_MESSAGE_OPTIONS: Partial<SendMessageOptions> = {
 const isContributeMessage = (text: string) => text.match(/hey|hi|hello|contribute|feature|thanks|thx|tks/)
 const isJoinMessage = (text: string) => text.match(/start|join|subscribe/)
 const isHelpMessage = (text: string) =>
-  text.match(/help|hepl|hpel|halp|unavailable|filter|what|hilfe|how|when|vaccine|impfstoff/)
+  text.match(
+    /help|hepl|hpel|halp|unavailable|filter|what|hilfe|how|when|vaccine|impfstoff|appointment|instruction|insctruction/,
+  )
 const isStopMessage = (text: string) =>
   text.match(/stop|spot|spto|sopt|sotp|leave|delete|exit|pause|quiet|mute|end|finish|shut|unsubscribe|off/)
 
