@@ -38,7 +38,7 @@ export function getJoin(userIds: number[], chat: TelegramBot.Chat): Message {
   const { id } = chat
   const _isPresent = userIds.includes(id)
 
-  if (_isPresent) return { id, message: '❌ You are already part of the team. 😘' }
+  if (_isPresent) return { id, message: "🎉 You're already subscribed to the latest notifications." }
 
   saveNewUserIds(JSON.stringify({ ids: [...userIds, id] }))
   logAction('JOIN', chat, userIds.length + 1)
@@ -46,7 +46,7 @@ export function getJoin(userIds: number[], chat: TelegramBot.Chat): Message {
   return {
     id,
     message:
-      '👋🏼 Welcome to the team. Just wait for new avail. appointments now. In the meantime, feel free to check upon this website overall avail. dates: https://impfstoff.link/',
+      "👋🏼 Welcome to the Impfstoff bot! I check Doctolib for available vaccine appointments in Berlin, and notify you as soon as they become available.\n\n🌴 Sit back and relax. If you don't hear from me right away, keep in mind that slots open infrequently, and tend to open up during the day.\n\nIn the meantime, feel free to check the website for recent availability statistics: https://impfstoff.link/",
   }
 }
 
@@ -61,15 +61,15 @@ export function getHelp(userIds: number[], chat: TelegramBot.Chat): Message {
       id,
       message:
         '\
-‼️ You are already part of the team, just sit back, relax and wait for new upcoming, hopefully, available appointments seen in less than 10 minutes. 😘 \n\n\
-❗️ We send the avail. appointments over a time box of 10 minutes (in case new ones pop up). 😘)\n\n\
-‼️ Based on the statistics we’ve collected, a "significantly earlier" appointment stays available for about *20 seconds*.\
-That is the amount of time that you have to choose the dates for the first and second shots, agree to the notices, fill the form with your information and confirm. Being able to do this all for the first time in 20 seconds is virtually impossible, so we recommend that you book an appointment for a later date to get used to the process, and then cancel that appointment if you want to try to book an earlier date.',
+✨ You are already subscribed to updates — sit back, relax, and wait for vaccine appoinment notifications as they become available.\n\n\
+💁 Keep in mind that slots open infrequently, and tend to open up during the day\n\n\
+📝 Note: Available appointments tend to be booked quickly once available. For example, some same-week appointments may be gone by the time you see the notification.\
+For best results, we recommend booking appointments further into the future. If an earlier date becomes more readily available, you can always cancel your original appointment.',
     }
 
   return {
     id,
-    message: '👋🏼 Press `Join` in order to join on the queue for fetching available vaccine appointments in Berlin.',
+    message: '👋🏼 Tap or press `Join` to begin receiving notificatoins for available vaccine appointments in Berlin.',
     omit: false,
     options: {
       reply_markup: {
@@ -95,7 +95,7 @@ export function getStop(userIds: number[], chat: TelegramBot.Chat): Message {
     return {
       id,
       message:
-        '👋🏼 Ok, we will no longer send you any messages. If you want to join us again, just press `Join` below. ❤️',
+        "👍 Alles klar, I'll stop sending messages. If at any point you want to resubscribe, just tap or press `Join` below. ❤️",
       options: {
         reply_markup: {
           inline_keyboard: [
@@ -109,7 +109,7 @@ export function getStop(userIds: number[], chat: TelegramBot.Chat): Message {
 
   return {
     id,
-    message: "☑️ You've already been removed. If you want to join us again, just press `Join` below. ❤️",
+    message: "☑️ You've already been removed. If you want to join again, just tap or press `Join` below. ❤️",
     options: {
       reply_markup: {
         inline_keyboard: [[{ text: ACTIONS.join.copy, callback_data: ACTIONS.join.enum }]],
@@ -123,7 +123,7 @@ export function getTwitter(chat: TelegramBot.Chat): Message {
 
   return {
     id,
-    message: '🐥 Also, check out our Twitter bot here: https://twitter.com/impfstoffBot ❤️',
+    message: '🐥 Prefer Twitter? Check out our Twitter bot here: https://twitter.com/impfstoffBot ❤️',
     options: {
       [DISABLE_PAGE_PREVIEW]: true,
     },
@@ -142,12 +142,12 @@ export function getContribute(chat: TelegramBot.Chat, shouldLog = false): Messag
     },
     message: `Hey ${
       chat.first_name || 'you'
-    }, there are a few ways you may contribute with the bot! I appreciate your interest in advance, whatever it is! 💖\n\n\
-Since there is involved costs in aws machines and efforts around an open-source project in GitHub (link at the bottom), the options are:\n\n\
-💰 Use PayPal for whatever amount you wish: https://paypal.me/guicheffer\n\
-🍺 Buy me a beer: https://www.buymeacoffee.com/guicheffer\n\
-❗️ Open issues and pull requests in our repo here: https://github.com/guicheffer/impfstoff.bot\n
-📢 Feel free to give your feedback on this Reddit thread: https://www.reddit.com/r/berlin/comments/mzo067/availability_of_appointments_for_the_vaccination/\n\n\
-I am happy to help you finding vaccine slots and we'll be definitely adding new features and fixes into this and the twitter bot. I appreciate your help! ❤️`,
+    }, if you find this bot useful, my team would appreciate any support, no matter what kind! 💖\n\n\
+I'm powered by open-source code written by the local Berlin community. To support in improving my functionality, helping cover the costs involved to regularly check availabilities, and more, you can:\n\n\
+💸 Donate via PayPal for whatever amount you find appropriate: https://paypal.me/guicheffer\n\
+🍻 Buy me a beer (to be enjoyed at a local Berlin patio): https://www.buymeacoffee.com/guicheffer\n\
+🧑‍💻 Contribue to the code or open issues: https://github.com/guicheffer/impfstoff.bot\n
+📢 Provide feedback on this Reddit thread: https://www.reddit.com/r/berlin/comments/mzo067/availability_of_appointments_for_the_vaccination/\n\n\
+I hope I can help you find vaccine slots. Stay safe, and thanks for your support! ❤️`,
   }
 }

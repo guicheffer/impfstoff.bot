@@ -29,7 +29,7 @@ export const ACTIONS = {
     enum: 'join',
   },
   stop: {
-    copy: 'Stop, please!',
+    copy: 'Stop / Unsubscribe',
     enum: 'stop',
   },
 }
@@ -44,7 +44,7 @@ const isContributeMessage = (text: string) => text.match(/hey|hi|hello|contribut
 const isJoinMessage = (text: string) => text.match(/start|join|subscribe/)
 const isHelpMessage = (text: string) =>
   text.match(
-    /help|hepl|hpel|halp|unavailable|filter|what|hilfe|how|when|vaccine|impfstoff|appointment|instruction|insctruction/,
+    /help|hepl|hpel|halp|unavailable|filter|what|hilfe|how|when|vaccine|impfstoff|appointment|instruction|insctructio|pfizer|biontech|moderna|wie|astra/,
   )
 const isStopMessage = (text: string) =>
   text.match(/stop|spot|spto|sopt|sotp|leave|delete|exit|pause|quiet|mute|end|finish|shut|unsubscribe|off/)
@@ -187,7 +187,7 @@ bot.on('message', ({ chat, text: rawText }: TelegramBot.Message) => {
 
   return send({
     id,
-    message: '🤔 Not sure what you mean, but maybe one of the following options might help you:',
+    message: "🤔 I'm not sure what you mean by that. Maybe one of the following options might help you:",
     omit: false,
     text,
     options: {

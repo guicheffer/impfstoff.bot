@@ -76,7 +76,7 @@ setInterval(() => {
           const link = urls[place]
           const date = new Date(availableDate).toLocaleDateString('de-DE')
 
-          msgsQueue.push(`💉 Available slots in _${placeName}_ on *${date}* at ${link}`)
+          msgsQueue.push(`💉 Available slots found at _${placeName}_ on *${date}*: ${link}`)
         }
       }
 
