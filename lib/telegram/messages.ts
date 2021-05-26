@@ -12,14 +12,12 @@ export type Message = {
   options?: TelegramBot.SendMessageOptions
 }
 const logAction = (action: string, chat: TelegramBot.Chat, amountUsers?: number, _isPresent = false) => {
-  const { first_name, username, id } = chat
+  const { id } = chat
 
   logger.info(
     {
       amountUsers,
-      first_name,
       id,
-      username,
       ...(action === 'HELP' ? { _isPresent } : {}),
     },
     action,
@@ -95,7 +93,7 @@ export function getStop(userIds: number[], chat: TelegramBot.Chat): Message {
     return {
       id,
       message:
-        "👍 Alles klar, I'll stop sending messages. If at any point you want to resubscribe, just tap or press `Join` below. ❤️",
+        "👍 Alles klar! I'll stop sending messages. If at any point you want to resubscribe, just tap or press `Join` below. ❤️",
       options: {
         reply_markup: {
           inline_keyboard: [
@@ -123,7 +121,7 @@ export function getTwitter(chat: TelegramBot.Chat): Message {
 
   return {
     id,
-    message: '🐥 Prefer Twitter? Check out our Twitter bot here: https://twitter.com/impfstoffBot ❤️',
+    message: '🐥 Prefer Twitter? Check out our Twitter bot here: https://twitter.com/impfstoffBot',
     options: {
       [DISABLE_PAGE_PREVIEW]: true,
     },
@@ -140,8 +138,8 @@ export function getContribute(chat: TelegramBot.Chat, shouldLog = false): Messag
     options: {
       [DISABLE_PAGE_PREVIEW]: true,
     },
-    message: `Hey ${
-      chat.first_name || 'you'
+    message: `Hey${
+      chat.first_name ? ' ' + chat.first_name : ''
     }, if you find this bot useful, my team would appreciate any support, no matter what kind! 💖\n\n\
 I'm powered by open-source code written by the local Berlin community. To support in improving my functionality, helping cover the costs involved to regularly check availabilities, and more, you can:\n\n\
 💸 Donate via PayPal for whatever amount you find appropriate: https://paypal.me/guicheffer\n\
