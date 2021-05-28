@@ -144,7 +144,7 @@ export function getContribute(chat: TelegramBot.Chat, shouldLog = false): Messag
 I'm powered by open-source code written by the local Berlin community. To support in improving my functionality, helping cover the costs involved to regularly check availabilities, and more, you can:\n\n\
 💸 Donate via PayPal for whatever amount you find appropriate: https://paypal.me/guicheffer\n\
 🍻 Buy me a beer (to be enjoyed at a local Berlin patio): https://www.buymeacoffee.com/guicheffer\n\
-🧑‍💻 Contribue to the code or open issues: https://github.com/guicheffer/impfstoff.bot\n
+🧑‍💻 Contribute to the code or open issues: https://github.com/guicheffer/impfstoff.bot\n
 📢 Provide feedback on this Reddit thread: https://www.reddit.com/r/berlin/comments/mzo067/availability_of_appointments_for_the_vaccination/\n\n\
 I hope I can help you find vaccine slots. Stay safe, and thanks for your support! ❤️`,
   }
