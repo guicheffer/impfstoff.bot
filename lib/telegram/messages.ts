@@ -128,6 +128,15 @@ export function getTwitter(chat: TelegramBot.Chat): Message {
   }
 }
 
+export function getLanguageSwitchRequest(chat: TelegramBot.Chat): Message {
+  const { id } = chat
+
+  return {
+    id,
+    message: '🚫 I regret to inform we have no German language yet on the bot. Keep up for good news soon!',
+  }
+}
+
 export function getContribute(chat: TelegramBot.Chat, shouldLog = false): Message {
   const { id } = chat
 

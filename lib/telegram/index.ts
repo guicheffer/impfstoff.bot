@@ -44,10 +44,11 @@ const isContributeMessage = (text: string) => text.match(/hey|hi|hello|contribut
 const isJoinMessage = (text: string) => text.match(/start|join|subscribe/)
 const isHelpMessage = (text: string) =>
   text.match(
-    /help|hepl|hpel|halp|unavailable|filter|what|hilfe|how|when|vaccine|impfstoff|appointment|instruction|insctructio|pfizer|biontech|moderna|wie|astra/,
+    /help|hepl|hpel|halp|❤️|will|twitter|unavailable|filter|impfung|what|hilfe|how|when|vaccine|impfstoff|appointment|instruction|insctructio|pfizer|biontech|moderna|wie|astra/,
   )
+const getLanguageSwitchRequest = (text: string) => text.match(/deutsch|german/)
 const isStopMessage = (text: string) =>
-  text.match(/stop|spot|spto|sopt|sotp|leave|delete|exit|pause|quiet|mute|end|finish|shut|unsubscribe|off/)
+  text.match(/close|stop|spot|spto|sopt|sotp|leave|delete|exit|pause|quiet|mute|end|finish|shut|unsubscribe|off/)
 
 function readUserIds(): number[] {
   return JSON.parse(fs.readFileSync(paths.users.fileName, 'utf-8')).ids
@@ -167,6 +168,8 @@ bot.on('message', ({ chat, text: rawText }: TelegramBot.Message) => {
     return send(messages.getHelp(userIds, chat)).then(() => {
       return send(messages.getContribute(chat)).then(() => send(messages.getTwitter(chat)))
     })
+
+  if (getLanguageSwitchRequest(text)) return send(messages.getLanguageSwitchRequest(chat))
 
   if (isStopMessage(text)) return send(messages.getStop(userIds, chat))
 
