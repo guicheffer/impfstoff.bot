@@ -5,7 +5,7 @@ import { send } from './bots'
 import { logger } from './logger'
 import { fetchImpfstoffLink, DateKey, ImpfstoffLinkVenue } from './impfstoff-link'
 
-const DIFF_MIN = 2 // 2 minutes safe check
+const DIFF_MIN = 3 // 3 minutes safe check
 const TIMER_BOT_FETCH = 2 * 1000 // 2 seconds
 
 const urls = {
@@ -33,12 +33,12 @@ function checkFirstAvailableDate(dates: ImpfstoffLinkVenue['stats'], dateKeys: D
     if (diffDays !== 1) continue
     if (diffHrs !== 1) continue
 
-    if (diffMins <= DIFF_MIN) {
+    if (diffMins < DIFF_MIN) {
       if (usedQueue[dateKeys[i]]?.toString() === lastTime.toString()) {
         return { availableDate: null }
       }
 
-      if ((diffMins === 0 || diffMins === 1) && usedQueue[dateKeys[i]] === 0) {
+      if ((diffMins === 0 || diffMins === 1 || diffMins === 2) && usedQueue[dateKeys[i]] === 0) {
         return { availableDate: null }
       }
 
