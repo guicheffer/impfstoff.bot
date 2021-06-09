@@ -33,10 +33,11 @@ function checkFirstAvailableDate(dates: ImpfstoffLinkVenue['stats'], dateKeys: D
     if (diffDays !== 1) continue
     if (diffHrs !== 1) continue
 
-    if (diffMins < DIFF_MIN) {
+    if (diffMins <= DIFF_MIN) {
       if (usedQueue[dateKeys[i]]?.toString() === lastTime.toString()) {
         return { availableDate: null }
       }
+
       if ((diffMins === 0 || diffMins === 1) && usedQueue[dateKeys[i]] === 0) {
         return { availableDate: null }
       }
