@@ -24,7 +24,7 @@ const logAction = (action: string, chat: TelegramBot.Chat, amountUsers?: number,
   )
 }
 
-export function saveNewUserIds(userIds: string): void {
+export function saveUserIds(userIds: string): void {
   try {
     fs.writeFileSync(paths.users.fileName, userIds)
   } catch (error) {
@@ -38,7 +38,7 @@ export function getJoin(userIds: number[], chat: TelegramBot.Chat): Message {
 
   if (_isPresent) return { id, message: "🎉 You're already subscribed to the latest notifications." }
 
-  saveNewUserIds(JSON.stringify({ ids: [...userIds, id] }))
+  saveUserIds(JSON.stringify({ ids: [...userIds, id] }))
   logAction('JOIN', chat, userIds.length + 1)
 
   return {
@@ -87,7 +87,7 @@ export function getStop(userIds: number[], chat: TelegramBot.Chat): Message {
   if (_isPresent) {
     const filteredUserIds = userIds.filter((currentId) => currentId !== id)
 
-    saveNewUserIds(JSON.stringify({ ids: filteredUserIds }))
+    saveUserIds(JSON.stringify({ ids: filteredUserIds }))
     logAction('STOP', chat, userIds.length - 1)
 
     return {

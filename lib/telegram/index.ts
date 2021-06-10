@@ -34,7 +34,7 @@ export const ACTIONS = {
   },
 }
 
-const DEFAULT_CORONA_IMPFTERMINE_NET_GROUP = process.env.CORONA_IMPFTERMINE_NET_GROUP
+const DEFAULT_CORONA_IMPFTERMINE_NET_GROUP = process.env.CORONA_IMPFTERMINE_NET_GROUP as string
 export const DISABLE_PAGE_PREVIEW = 'disable_web_page_preview'
 const DEFAULT_MESSAGE_OPTIONS: Partial<SendMessageOptions> = {
   [DISABLE_PAGE_PREVIEW]: true,
@@ -54,10 +54,7 @@ const isStopMessage = (text: string) =>
   )
 
 function readUserIds(): number[] {
-  const parsedUserIds = JSON.parse(fs.readFileSync(paths.users.fileName, 'utf-8')).ids
-  parsedUserIds.push(DEFAULT_CORONA_IMPFTERMINE_NET_GROUP)
-
-  return parsedUserIds
+  return JSON.parse(fs.readFileSync(paths.users.fileName, 'utf-8')).ids
 }
 
 const send = async ({ id, message, omit = true, options, text = undefined }: messages.Message) => {
@@ -80,48 +77,47 @@ const broadcast = async (
   if (!force) shouldDebounceBroadcast = true
 
   const userIds = readUserIds()
+  userIds.push(parseInt(DEFAULT_CORONA_IMPFTERMINE_NET_GROUP))
 
   // This will prioritize LIFO over the user ids when broadcasting
   blockedUserIds = []
-  const mapUsersPromises = readUserIds()
-    .reverse()
-    .map(
-      (id: number, index: number) =>
-        new Promise((resolve, reject) => {
-          setTimeout(async () => {
-            try {
-              return resolve(
-                await send({
-                  id,
-                  message,
-                  options: { ...DEFAULT_MESSAGE_OPTIONS, ...options },
-                }),
-              )
-            } catch (error) {
-              if (
-                error.message.includes('chat not found') ||
-                error.message.includes('bot was blocked') ||
-                error.message.includes('bot was kicked') ||
-                error.message.includes('user is deactivated') ||
-                error.message.includes('group chat was upgraded') ||
-                error.message.includes('group chat was deactivated')
-              ) {
-                blockedUserIds.push(id)
-                logger.error({ error, id }, 'BLOCKED_USER_TO_REMOVE')
-              } else {
-                logger.error({ error, id }, 'GENERAL_BROADCAST_ERROR')
-              }
-
-              reject(error)
+  const mapUsersPromises = userIds.reverse().map(
+    (id: number, index: number) =>
+      new Promise((resolve, reject) => {
+        setTimeout(async () => {
+          try {
+            return resolve(
+              await send({
+                id,
+                message,
+                options: { ...DEFAULT_MESSAGE_OPTIONS, ...options },
+              }),
+            )
+          } catch (error) {
+            if (
+              error.message.includes('chat not found') ||
+              error.message.includes('bot was blocked') ||
+              error.message.includes('bot was kicked') ||
+              error.message.includes('user is deactivated') ||
+              error.message.includes('group chat was upgraded') ||
+              error.message.includes('group chat was deactivated')
+            ) {
+              blockedUserIds.push(id)
+              logger.error({ error, id }, 'BLOCKED_USER_TO_REMOVE')
+            } else {
+              logger.error({ error, id }, 'GENERAL_BROADCAST_ERROR')
             }
-            /* This will make ~30 messages to be sent in a second, considering
-             * its potential duplicated messages as well; (max. telegram limit)
-             *
-             * https://core.telegram.org/bots/faq#broadcasting-to-users
-             */
-          }, index * 40)
-        }),
-    )
+
+            reject(error)
+          }
+          /* This will make ~30 messages to be sent in a second, considering
+           * its potential duplicated messages as well; (max. telegram limit)
+           *
+           * https://core.telegram.org/bots/faq#broadcasting-to-users
+           */
+        }, index * 40)
+      }),
+  )
 
   // eslint-disable-next-line @typescript-eslint/no-empty-function
   await Promise.all(mapUsersPromises).catch(() => {}) // No needs to log all promises
@@ -129,7 +125,7 @@ const broadcast = async (
   if (blockedUserIds.length) {
     const userIdsWithoutBlockedOnes = readUserIds().filter((currentId) => !blockedUserIds.includes(currentId))
 
-    messages.saveNewUserIds(JSON.stringify({ ids: userIdsWithoutBlockedOnes }))
+    messages.saveUserIds(JSON.stringify({ ids: userIdsWithoutBlockedOnes }))
 
     logger.warn(
       {
