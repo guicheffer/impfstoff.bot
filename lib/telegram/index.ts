@@ -66,18 +66,20 @@ const send = async ({ id, message, omit = true, options, text = undefined }: mes
 let blockedUserIds: number[] = []
 let shouldDebounceBroadcast = false
 
-type BroadcastOptions = { force: boolean } & Partial<SendMessageOptions>
+type BroadcastOptions = { announce: boolean } & Partial<SendMessageOptions>
 
 const broadcast = async (
   message: string,
-  { force, ...options }: BroadcastOptions = { force: false },
+  { announce, ...options }: BroadcastOptions = { announce: false },
 ): Promise<void> => {
-  // Force debounce on broadcast
-  if (!force && shouldDebounceBroadcast) return await Promise.reject({ message: 'STILL_BROADCASTING', text: message })
-  if (!force) shouldDebounceBroadcast = true
+  // announce debounce on broadcast
+  if (!announce && shouldDebounceBroadcast)
+    return await Promise.reject({ message: 'STILL_BROADCASTING', text: message })
+  if (!announce) shouldDebounceBroadcast = true
 
   const userIds = readUserIds()
-  userIds.push(parseInt(DEFAULT_CORONA_IMPFTERMINE_NET_GROUP))
+
+  if (!announce) userIds.push(parseInt(DEFAULT_CORONA_IMPFTERMINE_NET_GROUP))
 
   // This will prioritize LIFO over the user ids when broadcasting
   blockedUserIds = []
@@ -150,7 +152,7 @@ bot.on('message', ({ chat, text: rawText }: TelegramBot.Message) => {
     const message = rawText?.replace('/broadcast ', '📣 ')
 
     return broadcast(message, {
-      force: true, // Force broadcast to happen since it's a manual announcement
+      announce: true,
       [DISABLE_PAGE_PREVIEW]: false,
     })
       .then(() => logger.info(`📣 Broadcasted: "${rawText}"`, 'SEND_BROADCAST'))
