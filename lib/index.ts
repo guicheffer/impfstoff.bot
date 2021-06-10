@@ -14,6 +14,7 @@ const urls = {
   messe: 'https://bit.ly/3b0xCJr',
   velodrom: 'https://bit.ly/3thD8h7',
   tegel: 'https://bit.ly/3eeAIeT',
+  tegelmod: 'https://bit.ly/2TifHrP',
   erika: 'https://bit.ly/2QIki5J',
 }
 

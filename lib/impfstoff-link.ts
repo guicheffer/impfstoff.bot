@@ -2,7 +2,7 @@ import fetch from 'node-fetch'
 
 const IMPFSTOFF_LINK_URL = process.env.API || `https://api.impfstoff.link/?robot=1`
 
-export type VenueId = 'arena' | 'tempelhof' | 'messe' | 'velodrom' | 'tegel' | 'erika'
+export type VenueId = 'arena' | 'tempelhof' | 'messe' | 'velodrom' | 'tegel' | 'tegelmod' | 'erika'
 export type DateKey = `${number}-${number}-${number}`
 
 export interface ImpfstoffLinkStats {
