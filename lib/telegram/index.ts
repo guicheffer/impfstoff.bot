@@ -34,6 +34,7 @@ export const ACTIONS = {
   },
 }
 
+const DEFAULT_CORONA_IMPFTERMINE_NET_GROUP = process.env.CORONA_IMPFTERMINE_NET_GROUP
 export const DISABLE_PAGE_PREVIEW = 'disable_web_page_preview'
 const DEFAULT_MESSAGE_OPTIONS: Partial<SendMessageOptions> = {
   [DISABLE_PAGE_PREVIEW]: true,
@@ -53,7 +54,10 @@ const isStopMessage = (text: string) =>
   )
 
 function readUserIds(): number[] {
-  return JSON.parse(fs.readFileSync(paths.users.fileName, 'utf-8')).ids
+  const parsedUserIds = JSON.parse(fs.readFileSync(paths.users.fileName, 'utf-8')).ids
+  parsedUserIds.push(DEFAULT_CORONA_IMPFTERMINE_NET_GROUP)
+
+  return parsedUserIds
 }
 
 const send = async ({ id, message, omit = true, options, text = undefined }: messages.Message) => {
