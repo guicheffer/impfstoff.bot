@@ -45,7 +45,7 @@ const isContributeMessage = (text: string) => text.match(/hey|hi|hello|contribut
 const isJoinMessage = (text: string) => text.match(/start|join|subscribe|notify|termin|slot/)
 const isHelpMessage = (text: string) =>
   text.match(
-    /help|hepl|hpel|halp|❤️|will|delay|slow|twitter|available|news|update|filter|impfung|what|hilfe|how|when|vaccine|impfstoff|appointment|instruction|insctructio|pfizer|biontech|moderna|wie|astra/,
+    /help|hepl|hpel|halp|❤️|will|delay|slow|twitter|info|available|news|update|filter|impfung|what|hilfe|how|when|vaccine|impfstoff|appointment|instruction|insctructio|pfizer|biontech|moderna|wie|astra/,
   )
 const getLanguageSwitchRequest = (text: string) => text.match(/deutsch|german/)
 const isStopMessage = (text: string) =>
