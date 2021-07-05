@@ -1,3 +1,5 @@
+# *[DEACTIVATED]*
+
 # 💉 impfstoff.bot
 
 Bot for telegram and twitter (for now) to fetch vaccine appointments in Berlin (and, in the future, other cities).
