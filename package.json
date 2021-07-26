@@ -26,7 +26,7 @@
   "devDependencies": {
     "@types/node-fetch": "^2.5.12",
     "@types/node-telegram-bot-api": "^0.51.4",
-    "@types/pino": "^6.3.9",
+    "@types/pino": "^6.3.10",
     "@typescript-eslint/eslint-plugin": "^4.28.4",
     "@typescript-eslint/parser": "^4.28.4",
     "eslint": "^7.31.0",
