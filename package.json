@@ -24,7 +24,7 @@
     "twitter-lite": "^1.1.0"
   },
   "devDependencies": {
-    "@types/node-fetch": "^2.5.12",
+    "@types/node-fetch": "^3.0.3",
     "@types/node-telegram-bot-api": "^0.51.4",
     "@types/pino": "^6.3.11",
     "@typescript-eslint/eslint-plugin": "^4.30.0",
