@@ -20,7 +20,7 @@
     "dotenv": "^10.0.0",
     "node-fetch": "^3.0.0",
     "node-telegram-bot-api": "^0.54.0",
-    "pino": "^7.0.2",
+    "pino": "^7.3.0",
     "twitter-lite": "^1.1.0"
   },
   "devDependencies": {
