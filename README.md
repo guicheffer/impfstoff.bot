@@ -2,7 +2,7 @@
 
 # 💉 impfstoff.bot
 
-~Bot for telegram and twitter (for now) to fetch vaccine appointments in Berlin (and, in the future, other cities).~
+**Old Bot** for _telegram_ and _twitter_ (for now) to fetch vaccine appointments in Berlin (and, in the future, other cities) by using [Doctolib](https://github.com/doctolib).
 
 ## What?
 
@@ -33,12 +33,12 @@ Based on [impfstoff.link](https://impfstoff.link/)'s idea. Thanks to this site w
 ## Material
 
 ### Links
-https://checkpoint.tagesspiegel.de/langmeldung/2E5SXha7cMUSujdr6936XG
-https://www.berliner-zeitung.de/mensch-metropole/wie-komme-ich-frueher-an-einen-impftermin-die-webseite-impstofflink-hilft-li.156277
-https://www.morgenpost.de/berlin/article232201017/Ansturm-auf-Impfzentren.html
-https://www.bz-berlin.de/berlin/corona-impfung-berlin-alle-termine-in-corona-impfzentren-ausgebucht-so-kommen-sie-trotzdem-an-den-piks
-https://www.berliner-kurier.de/berlin/diesen-trick-sollte-jeder-kennen-mit-dieser-website-kommen-sie-schneller-an-einen-impftermin-li.156407
-https://netzpolitik.org/2021/npp-232-zur-digitalen-vergabe-von-impfterminen-ein-angebot-dass-du-nicht-annehmen-kannst/
+- https://checkpoint.tagesspiegel.de/langmeldung/2E5SXha7cMUSujdr6936XG
+- https://www.berliner-zeitung.de/mensch-metropole/wie-komme-ich-frueher-an-einen-impftermin-die-webseite-impstofflink-hilft-li.156277
+- https://www.morgenpost.de/berlin/article232201017/Ansturm-auf-Impfzentren.html
+- https://www.bz-berlin.de/berlin/corona-impfung-berlin-alle-termine-in-corona-impfzentren-ausgebucht-so-kommen-sie-trotzdem-an-den-piks
+- https://www.berliner-kurier.de/berlin/diesen-trick-sollte-jeder-kennen-mit-dieser-website-kommen-sie-schneller-an-einen-impftermin-li.156407
+- https://netzpolitik.org/2021/npp-232-zur-digitalen-vergabe-von-impfterminen-ein-angebot-dass-du-nicht-annehmen-kannst/
 
 ### Podcasts
 https://guicheffer.me/ep-spotify/
