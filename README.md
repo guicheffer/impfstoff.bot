@@ -2,7 +2,7 @@
 
 # 💉 impfstoff.bot
 
-**Old Bot** for _telegram_ and _twitter_ (for now) to fetch vaccine appointments in Berlin (and, in the future, other cities) by using [Doctolib](https://github.com/doctolib).
+**Old Bot** for _telegram_ and _twitter_ (for now) to fetch vaccine appointments in Berlin (and, in the future, other cities) by using [Doctolib](https://www.doctolib.de/) | [Doctolib](https://github.com/doctolib).
 
 ## What?
 
@@ -41,8 +41,8 @@ Based on [impfstoff.link](https://impfstoff.link/)'s idea. Thanks to this site w
 - https://netzpolitik.org/2021/npp-232-zur-digitalen-vergabe-von-impfterminen-ein-angebot-dass-du-nicht-annehmen-kannst/
 
 ### Podcasts
-https://guicheffer.me/ep-spotify/
-https://guicheffer.me/netzpolitik
+- https://guicheffer.me/ep-spotify/
+- https://guicheffer.me/netzpolitik
 
 ### Screenshots
 
