@@ -1,5 +1,7 @@
 # *[DEACTIVATED]*
 
+**PS**. This is deactivated but you can read its story here: https://medium.com/@guicheffer/how-javascript-helped-thousands-get-vaccinated-71bdd3bc6c4c
+
 # 💉 impfstoff.bot
 
 **Old Bot** for _telegram_ and _twitter_ (for now) to fetch vaccine appointments in Berlin (and, in the future, other cities) by using [Doctolib](https://www.doctolib.de/) | [Doctolib](https://github.com/doctolib).
@@ -33,6 +35,7 @@ Based on [impfstoff.link](https://impfstoff.link/)'s idea. Thanks to this site w
 ## Material
 
 ### Links
+- https://medium.com/@guicheffer/how-javascript-helped-thousands-get-vaccinated-71bdd3bc6c4c
 - https://checkpoint.tagesspiegel.de/langmeldung/2E5SXha7cMUSujdr6936XG
 - https://www.berliner-zeitung.de/mensch-metropole/wie-komme-ich-frueher-an-einen-impftermin-die-webseite-impstofflink-hilft-li.156277
 - https://www.morgenpost.de/berlin/article232201017/Ansturm-auf-Impfzentren.html
